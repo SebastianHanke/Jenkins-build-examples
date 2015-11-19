@@ -22,7 +22,7 @@ see HTML-version [here](http://sebastianhanke.github.io/Jenkins-build-examples)
         - configure jenkins IDE
         - create build project
         - Source-Code-Managment
-        - Post-Build-Aktionen
+        - Post-Build-actions
     - [Testing with Mocha(Chai), WebdriverIO and PhantomJS](#phantomjs)
         - Jenkins configuration
         - Configure Build
@@ -288,7 +288,7 @@ Enter name and choose "Free Style" project
       `wdio tests/resources/wdio.conf.js`
     
 <a name="None"></a>
-### Post-Build-Aktionen
+### Post-Build-actions
 -> Veröffentliche JUNIT-Testergebnisse
     Testberichte in XML-Format `**/tests/results/*.xml`
 
