@@ -1,9 +1,102 @@
 #Jenkins 
-###Installation auf Ubuntu 14.03.2 LTS (Codename: trusty64)
 
-##Installation
+## Table of contents
 
-###prerequisites
+<!-- MarkdownTOC depth=3 -->
+
+- Installation auf Ubuntu 14.03.2 LTS (Codename: trusty64)
+    - [Installation][installation]
+        - prerequisites
+        - install Jenkins
+        - some usefull notes
+        - start configuration
+        - jenkins browser commands
+        - workaround for svn connection problems
+        - fixing timezone-differences
+    - [JavaScript WebdriverIO-Testrunner with Mocha][javascript]
+        - Plugins in Jenkins IDE required
+        - Packages to install globally on jenkins server
+        - fixing xunit bug in webdriverio (not fixed by: 2.Oktober 2015)
+        - configure jenkins IDE
+        - create build project
+        - Source-Code-Managment
+        - Post-Build-Aktionen
+    - [Testing with Mocha(Chai), WebdriverIO and PhantomJS][phantomjs]
+        - Jenkins configuration
+        - Configure Build
+        - the respective config file `wdio.conf.js`
+        - Testing with ES6 generators (will reduce the callback-hell... ;))
+        - the results will be published in `/tests/results/*.xml`
+- [PHP][php]
+    - [Ant Version][phpant]
+        - install phpunit
+        - install Ant if not done by Jenkins
+        - otherwise go to Jenkins and configure Ant-Installation
+- Plugins for php
+    - [PHPunit][phpunit]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - configuration file (`/phpunit.xml`)
+        - jenkins post-build job configuration
+    - [PHP_CodeSniffer][phpcs]
+        - installation on server
+        - check which coding standards are installed
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - configuration file (under `build/ruleset.xml`)
+        - jenkins post-build job configuration
+    - [PHP_loc - lines of code][phploc]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - jenkins post-build job configuration
+    - [PHP_Depend][phpdepend]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - jenkins post-build job configuration
+        - integrate Jdependend SVG reports
+    - [PHPMD - PHP Mess Detector][phpmd]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - configuration file (under `build/phpmd.xml`)
+        - jenkins post-build job configuration
+    - [PHPCPD - Copy-Paste-Detector][phpcpd]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - jenkins post-build job configuration
+    - [PHP_dox][phpdox]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - configuration file (under `build/phpdox.xml`)
+        - jenkins post-build job configuration
+    - PHP_CodeBrowser (not in use!)
+    - [PHPMetrics][phpmetrics]
+        - installation on server
+        - jenkins plugin to visualize
+        - ant target in `build.xml`
+        - jenkins post-build job configuration
+    - [complete working solution `build.xml`][phpcompleteant]
+    - [Gradle Version][phpcompletegradle]
+- [Java][java]
+    - [Ant Version][javaant]
+    - download following .jar
+    - ISSUES
+        - [full `build.xml`][javacompleteant]
+        - [full `build.gradle`][javacompletegradle]
+
+<!-- /MarkdownTOC -->
+
+
+# Installation auf Ubuntu 14.03.2 LTS (Codename: trusty64)
+
+## Installation[installation]
+
+### prerequisites
 
 JDK and JRE 
         
@@ -17,7 +110,7 @@ download from http://openjdk.java.net/install/
     sudo apt-get install openjdk-7-jre
     sudo apt-get install openjdk-7-jdk
         
-###install Jenkins 
+### install Jenkins 
 ([see website](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu))  
         
     wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
@@ -25,17 +118,17 @@ download from http://openjdk.java.net/install/
     sudo apt-get update
     sudo apt-get install jenkins
     
-###some usefull notes    
+### some usefull notes    
 Jenkins will be launched as a aemon up on start. See `etc/init.d/jenkins` for more details
 The 'jenkins' user is created to run this service
 **Log files** will be placed in `/var/log/jenkins/jenkins.log`. Check this if you need troubleshooting Jenkins
 `/etc/default/jenkins` will capture configuration parameters for the launch like e.g. `JENKINS_HOME`
     
-###start configuration
+### start configuration
 By default, Jenkins will listen to port **8080** (e.g. http://jenkins-test.local:8080)
 Access this port with your browser to **start the configuration**
     
-###jenkins browser commands
+### jenkins browser commands
     
     http://jenkins-installation:8080/restart
 
@@ -43,7 +136,7 @@ Access this port with your browser to **start the configuration**
 
     http://jenkins-installation:8080/systemInfo
         
-###workaround for svn connection problems
+### workaround for svn connection problems
 
     sudo nano /etc/init.d/jenkins
         
@@ -57,7 +150,7 @@ the following should be inserted by you: `-Djsse.enableSNIExtension=false` so yo
             
     $SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar -Djsse.enableSNIExtension=false $JENKINS_WAR $JENKINS_ARGS" || return 2
             
-###fixing timezone-differences 
+### fixing timezone-differences 
 
     sudo nano /etc/default/jenkins
             
@@ -65,15 +158,15 @@ insert the following there:
             
     JAVA_ARGS="-Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Berlin"
             
-##JavaScript WebdriverIO-Testrunner with Mocha
+## JavaScript WebdriverIO-Testrunner with Mocha[javascript]
             
-###Plugins in Jenkins IDE required
+### Plugins in Jenkins IDE required
     
 * Email extension
 * NodeJS
 * JUnit
 
-###Packages to install globally on jenkins server
+### Packages to install globally on jenkins server
 * NodeJS
 * npm
 
@@ -118,7 +211,7 @@ on next startup selenium-server will be up automatically
 
     sudo npm install jasmine webdriverio wdio-jasmine-framework phantomjs -g
         
-###fixing xunit bug in webdriverio (not fixed by: 2.Oktober 2015)
+### fixing xunit bug in webdriverio (not fixed by: 2.Oktober 2015)
 
     sudo nano /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/Node-Default/lib/node_modules/webdriverio/lib/reporter/xunit.js
         
@@ -142,7 +235,7 @@ and insert `test.err &&` at status
                 file: test.file,
                 status: test.err && Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
                     
-###configure jenkins IDE
+### configure jenkins IDE
 
 configure jenkins -> system configuration
 
@@ -159,11 +252,11 @@ configure jenkins -> system configuration
   Default Subject `$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!`
   Default Content `${JELLY_SCRIPT,template="html"}`
   
-###create build project
+### create build project
 
 Enter name and choose "Free Style" project
 
-###Source-Code-Managment
+### Source-Code-Managment
 -> Subversion
     Repository URL 
     Credentials 
@@ -176,7 +269,7 @@ Enter name and choose "Free Style" project
 ~~`selenium-standalone start &`~~ (selenium-server is already running at server-startup)
       `wdio tests/resources/wdio.conf.js`
     
-###Post-Build-Aktionen
+### Post-Build-Aktionen
 -> Veröffentliche JUNIT-Testergebnisse
     Testberichte in XML-Format `**/tests/results/*.xml`
 
@@ -188,9 +281,9 @@ Enter name and choose "Free Style" project
     Default Content `$DEFAULT_CONTENT`
     
     
-##Testing with Mocha(Chai), WebdriverIO and PhantomJS
+## Testing with Mocha(Chai), WebdriverIO and PhantomJS[phantomjs]
 
-###Jenkins configuration
+### Jenkins configuration
 
 NodeJS configuration
 
@@ -211,7 +304,7 @@ Shell command (if selenium is no installed on server)
     sudo npm install selenium-standalone -g
     sudo selenium-standalone install
     
-###Configure Build
+### Configure Build
 
 Folder structure of repository
  
@@ -226,91 +319,96 @@ so the shell command should look like this:
         
         wdio tests/resources/wdio.conf.js
 
-###the respective config file `wdio.conf.js`
+### the respective config file `wdio.conf.js`
 
-    exports.config = {
-        
-        host: '192.168.56.103',
-        port: 4444,
-        path: '/wd/hub',
+```javascript
+exports.config = {
     
-        specs: [
-            './tests/scripts/webdriverio/**/*.js',
-            './tests/scripts/webdriverio/*.js'
-        ],
-        exclude: [
-            // 'path/to/excluded/files'
-        ],
-        capabilities: [{
-            browserName: 'phantomjs',
-            'phantomjs.binary.path': '/usr/local/bin/phantomjs'
-        }],
-        logLevel: 'verbose',
-        coloredLogs: true,
-        screenshotPath: './errorShots/',
-        baseUrl: 'http://the-internet.herokuapp.com',
-        waitforTimeout: 20000,
-        framework: 'mocha',
-        reporter: 'xunit',
-        reporterOptions: {
-            outputDir: './tests/results/'
-        },
-        //onPrepare: function() {
-            // do something
-        //},
-        before: function(done) {
-            console.log('before...lets get started');
-        },
-        after: function(failures, pid) {
-            console.log('after...stop everything');
-        },
-        //onComplete: function() {
-            // do something
-        //}
-    };
+    host: '192.168.56.103',
+    port: 4444,
+    path: '/wd/hub',
 
-###Testing with ES6 generators (will reduce the callback-hell... ;))
+    specs: [
+        './tests/scripts/webdriverio/**/*.js',
+        './tests/scripts/webdriverio/*.js'
+    ],
+    exclude: [
+        // 'path/to/excluded/files'
+    ],
+    capabilities: [{
+        browserName: 'phantomjs',
+        'phantomjs.binary.path': '/usr/local/bin/phantomjs'
+    }],
+    logLevel: 'verbose',
+    coloredLogs: true,
+    screenshotPath: './errorShots/',
+    baseUrl: 'http://the-internet.herokuapp.com',
+    waitforTimeout: 20000,
+    framework: 'mocha',
+    reporter: 'xunit',
+    reporterOptions: {
+        outputDir: './tests/results/'
+    },
+    //onPrepare: function() {
+        // do something
+    //},
+    before: function(done) {
+        console.log('before...lets get started');
+    },
+    after: function(failures, pid) {
+        console.log('after...stop everything');
+    },
+    //onComplete: function() {
+        // do something
+    //}
+};
+```
+
+### Testing with ES6 generators (will reduce the callback-hell... ;))
 
 The wdio test runner supports ES6 generators.
 The following code therefor works as intended (with `baseUrl: 'http://the-internet.herokuapp.com'` set in wdio.config.js
 
-    "use strict"
-    var assert = require('assert');
-    
-    describe('checkboxes', function() {
-    
-        it('checkbox 2 should be enabled', function*() {
-            yield browser.url('/checkboxes');
-            yield browser.isSelected('#checkboxes input:last-Child').then(function(isSelected) {
-                assert.equal(isSelected, true);
-                /*expect(isSelected).toBe(true);*/
-            });
+```javascript
+"use strict"
+var assert = require('assert');
+
+describe('checkboxes', function() {
+
+    it('checkbox 2 should be enabled', function*() {
+        yield browser.url('/checkboxes');
+        yield browser.isSelected('#checkboxes input:last-Child').then(function(isSelected) {
+            assert.equal(isSelected, true);
+            /*expect(isSelected).toBe(true);*/
         });
-    
-        it('checkbox 1 should be enabled after clicking on it', function*() {
-            yield browser.url('/checkboxes');
-            yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
-                assert.equal(isSelected, false);
-            });
-            yield browser.click('#checkboxes input:first-Child');
-            yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
-                assert.equal(isSelected, true);
-            });
-        });
-    
     });
-        
-###the results will be published in `/tests/results/*.xml`
+
+    it('checkbox 1 should be enabled after clicking on it', function*() {
+        yield browser.url('/checkboxes');
+        yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
+            assert.equal(isSelected, false);
+        });
+        yield browser.click('#checkboxes input:first-Child');
+        yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
+            assert.equal(isSelected, true);
+        });
+    });
+
+});
+
+```
+
+### the results will be published in `/tests/results/*.xml`
 
 see `wdio.conf.js`
 so post-build-actions will be
 
 publish JUnit results
 
-        **/tests/results/*.xml
+`**/tests/results/*.xml`
 
 
-####problems with phantomjs
+#### problems with phantomjs
 
 if you try to e.g. .click() an element and the following error ocurrs
  `Problem: Element is not currently visible and may not be manipulated`
@@ -319,38 +417,38 @@ this is a webdriverIO bug, that meand that the element you tried to click is cur
 in this case try a higher window size before launching your tests
 e.g.:
 
-        describe('a click event', function () {
-            console.log('test....starts now....');
-            it('should open a new page', function(done) {
-                browser
-                    .setViewportSize({
-                        width: 1024,
-                        height: 768
-                    })
-                    .windowHandleSize().then(function(size) {
-                        console.log('...this is the size',size);
-                    })
-                    .click('.ac-gn-link-mac').pause(2000).getTitle().then(function (title) {
-                        console.log(title);
-                        expect(title).toEqual('Mac – Apple (DE)');
-                        done();
-                    });
+```javascript
+describe('a click event', function () {
+    console.log('test....starts now....');
+    it('should open a new page', function(done) {
+        browser
+            .setViewportSize({
+                width: 1024,
+                height: 768
             })
-        });
-        
+            .windowHandleSize().then(function(size) {
+                console.log('...this is the size',size);
+            })
+            .click('.ac-gn-link-mac').pause(2000).getTitle().then(function (title) {
+                console.log(title);
+                expect(title).toEqual('Mac – Apple (DE)');
+                done();
+            });
+    })
+});
+```
 
+# PHP[php]
 
-#PHP
+## Ant Version[phpant]
 
-##Ant Version
+### install phpunit
 
-###install phpunit
-
-###install Ant if not done by Jenkins
+### install Ant if not done by Jenkins
 
     sudo apt-get install ant
         
-###otherwise go to Jenkins and configure Ant-Installation        
+### otherwise go to Jenkins and configure Ant-Installation        
         
 configure Jenkins -> configure system -> Ant -> Ant installations -> install automatically
 
@@ -358,17 +456,18 @@ configure jenkins -> configure plugins -> install Ant plugin
                 
 
             
-####editable email notifications
+#### editable email notifications
 
 install plugin to send email notifications
 
 ---
 
-#Plugins for php
+# Plugins for php
 
-##PHPunit
+## PHPunit[phpunit]
 
-###installation on server
+### installation on server
+```sh
 
     curl -sS https://getcomposer.org/installer | php
     
@@ -379,9 +478,12 @@ install plugin to send email notifications
     //sudo nano ~/.bashrc
     
     //export PATH=$PATH:~/.composer/vendor/bin/
-        
-####upgrade php to 5.6
-        
+```
+
+
+#### upgrade php to 5.6
+    
+```sh
     sudo apt-get -y update
     
     add-apt-repository ppa:ondrej/php5-5.6
@@ -391,9 +493,9 @@ install plugin to send email notifications
     sudo apt-get -y install php5
     
     php -v //to verify the version
-        
+```
 
-####enable php-code-coverage like 'clover'
+#### enable php-code-coverage like 'clover'
 
 Clover provides the metrics you need to better balance the effort between writing code that does stuff, and code that tests stuff.
 
@@ -445,12 +547,13 @@ and add the line
 
     zend_extension = /usr/lib/php5/20131226/xdebug.so
 
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [XUnit](http://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin)
 
-###ant target in `build.xml`
-        
+### ant target in `build.xml`
+
+```xml        
     <!--perform phpunit tests with coverage report-->
 
     <target name="phpunit"
@@ -479,9 +582,11 @@ and add the line
 
         <property name="phpunit.done" value="true"/>
     </target>
+```
 
-###configuration file (`/phpunit.xml`)
+### configuration file (`/phpunit.xml`)
 
+```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <phpunit
             backupGlobals="false"
@@ -511,9 +616,9 @@ and add the line
             </whitelist>
         </filter>
     </phpunit>
+```
 
-
-###jenkins post-build job configuration
+### jenkins post-build job configuration
 
 Publish JUnit results: `**/logs/junit.xml`
 Publish Clover results:  **Clover XML Location** `build/clover.xml`
@@ -523,26 +628,26 @@ Publish Clover results:  **Clover XML Location** `build/clover.xml`
 ---
 
 
-##PHP_CodeSniffer
+## PHP_CodeSniffer[phpcs]
 
-###installation on server
+### installation on server
 
     sudo pear install PHP_CodeSniffer
         
     //command: phpcs
         
-###check which coding standards are installed
+### check which coding standards are installed
 
     phpcs -i
         
     //The installed coding standards are Squiz, PSR2, PSR1, PHPCS, Zend, PEAR and MySource
         
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [Checkstyle](http://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin)
 
-###ant target in `build.xml`
-
+### ant target in `build.xml`
+```xml
     <!--find coding standard violations using CodeSniffer (command line version)-->
 
     <target name="phpcs"
@@ -589,8 +694,9 @@ Publish Clover results:  **Clover XML Location** `build/clover.xml`
 
         <property name="phpcs.done" value="true"/>
     </target>
-        
-###configuration file (under `build/ruleset.xml`)
+```
+
+### configuration file (under `build/ruleset.xml`)
         
         <?xml version="1.0"?>
         <ruleset name="name-of-your-coding-standard">
@@ -600,26 +706,26 @@ Publish Clover results:  **Clover XML Location** `build/clover.xml`
             <!-- ... -->
         </ruleset>
         
-###jenkins post-build job configuration
+### jenkins post-build job configuration
 
 Checkstyle: `**/build/logs/checkstyle.xml`
 
 ---
         
-##PHP_loc - lines of code   
+## PHP_loc - lines of code[phploc]   
    
-###installation on server   
+### installation on server   
   
     composer global require 'phploc/phploc=*'
 
     //command: phploc
         
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [Plot](http://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)
 
-###ant target in `build.xml`
-
+### ant target in `build.xml`
+```sh
     <target name="phploc"
             unless="phploc.done"
             description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
@@ -650,8 +756,9 @@ Checkstyle: `**/build/logs/checkstyle.xml`
 
         <property name="phploc.done" value="true"/>
     </target>
-        
-###jenkins post-build job configuration
+```
+
+### jenkins post-build job configuration
 
 Plot:
  
@@ -661,20 +768,20 @@ Plot:
 
 ---
         
-###PHP_Depend
+## PHP_Depend[phpdepend]
 
-###installation on server   
+### installation on server   
 
     composer global require 'pdepend/pdepend=*'
         
     //command: pdepend
         
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [JDepend](http://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin)
 
-###ant target in `build.xml`      
-
+### ant target in `build.xml`      
+```sh
     <!--performs static code analysis on a given source base, the sum of some statements or code fragments found in the analyzed source-->
 
     <target name="pdepend"
@@ -691,19 +798,21 @@ Plot:
 
         <property name="pdepend.done" value="true"/>
     </target>
-   
-###jenkins post-build job configuration
+```
+
+### jenkins post-build job configuration
 
 Report JDepend
 
 **Pre-generated JDepend File**: `build/logs/jdepend.xml`
 
-###integrate Jdependend SVG reports
+### integrate Jdependend SVG reports
         
 in project description insert 
-
+```html
     <img type="image/svg+xml" height="300" src="ws/build/pdepend/overview-pyramid.svg" width="500"></img>
     <img type="image/svg+xml" height="300" src="ws/build/pdepend/   dependencies.svg" width="500"></img>
+```
 
 Jenkins is probably configured to text, therefor: 
 
@@ -711,7 +820,7 @@ configure jenkins -> global security -> change markup to html
         
 ---
         
-###PHPMD - PHP Mess Detector
+## PHPMD - PHP Mess Detector[phpmd]
 
 [Clean Code Rules](http://phpmd.org/rules/cleancode.html)
 [Code Size Rules](http://phpmd.org/rules/codesize.html)
@@ -720,18 +829,18 @@ configure jenkins -> global security -> change markup to html
 [Naming Rules](http://phpmd.org/rules/naming.html)
 [Unused Code Rules](http://phpmd.org/rules/unusedcode.html)
 
-###installation on server  
+### installation on server  
 
     composer global require 'phpmd/phpmd=*'
                 
     //command: phpmd
    
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [PMD](http://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin)
 
-###ant target in `build.xml`
-        
+### ant target in `build.xml`
+```xml        
     <!--perform mess detection (command line version)-->
 
     <target name="phpmd"
@@ -762,9 +871,10 @@ configure jenkins -> global security -> change markup to html
 
         <property name="phpmd.done" value="true"/>
     </target>
-        
-###configuration file (under `build/phpmd.xml`)
+```
 
+### configuration file (under `build/phpmd.xml`)
+```xml
     <ruleset name="names-of-your-coding-standard"
              xmlns="http://pmd.sf.net/ruleset/1.0.0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -820,8 +930,9 @@ configure jenkins -> global security -> change markup to html
         <rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
 
     </ruleset>
-        
-###jenkins post-build job configuration
+```
+
+### jenkins post-build job configuration
 
 Report PMD anylsis
 
@@ -829,20 +940,20 @@ Report PMD anylsis
         
 ---
         
-###PHPCPD - Copy-Paste-Detector
+## PHPCPD - Copy-Paste-Detector[phpcpd]
 
-###installation on server  
+### installation on server  
         
     composer global require "sebastian/phpcpd=*"
         
     //command: phpcpd
         
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [Duplicate Code Scanner Plug-in](http://wiki.jenkins-ci.org/x/X4IuAg)
 
-###ant target in `build.xml`
-        
+### ant target in `build.xml`
+```xml        
     <!--find duplicate code (command line version)-->
 
     <target name="phpcpd"
@@ -869,8 +980,9 @@ Report PMD anylsis
 
         <property name="phpcpd.done" value="true"/>
     </target>
- 
-###jenkins post-build job configuration
+```
+
+### jenkins post-build job configuration
 
 Report Duplicate Code Scanner results
 
@@ -878,9 +990,9 @@ Report Duplicate Code Scanner results
         
 ---
         
-###PHP_dox
+## PHP_dox[phpdox]
 
-###installation on server  
+### installation on server  
         
     wget https://github.com/theseer/phpdox/releases/download/0.8.0/phpdox-0.8.0.phar
         
@@ -891,12 +1003,12 @@ Report Duplicate Code Scanner results
     //if not installed:
     sudo apt-get install php5-xsl
         
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 [HTML publisher](http://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin)
 
-###ant target in `build.xml`
-        
+### ant target in `build.xml`
+```xml        
     <target name="phpdox"
             unless="phpdox.done"
             depends="phploc-ci,phpcs-ci,phpmd-ci"
@@ -905,9 +1017,10 @@ Report Duplicate Code Scanner results
 
         <property name="phpdox.done" value="true"/>
     </target>
-        
-###configuration file (under `build/phpdox.xml`)
+```
 
+### configuration file (under `build/phpdox.xml`)
+```xml
     <?xml version="1.0"?>
     <phpdox xmlns='http://xml.phpdox.net/config'>
         <project name="name-of-project" source="${basedir}/src" workdir="${basedir}/phpdox">
@@ -928,8 +1041,9 @@ Report Duplicate Code Scanner results
             </generator>
         </project>
     </phpdox>
-        
-###jenkins post-build job configuration
+```
+
+### jenkins post-build job configuration
 
 Publish HTML reports
 
@@ -939,7 +1053,7 @@ Publish HTML reports
         
 ---
         
-###PHP_CodeBrowser (not in use!)
+## PHP_CodeBrowser (not in use!)
         
     composer global require "mayflower/php-codebrowser=~1.1"
         
@@ -947,15 +1061,15 @@ Publish HTML reports
         
 ---
 
-###PHPMetrics
+## PHPMetrics[phpmetrics]
 
-###installation on server  
+### installation on server  
 
     composer global require "halleck45/phpmetrics"
         
     //command: phpmetrics
         
-###jenkins plugin to visualize
+### jenkins plugin to visualize
 
 - for phpmetrics.xml option:
    [Plot](http://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin)
@@ -973,8 +1087,9 @@ Publish HTML reports
 - for phpmetrics.html option:
    [sidebar-link](http://wiki.jenkins-ci.org/display/JENKINS/Sidebar-Link+Plugin)
 
-###ant target in `build.xml`
-        
+### ant target in `build.xml`
+
+```xml        
     <!--generate documentation-->
 
     <target name="phpmetrics"
@@ -989,10 +1104,11 @@ Publish HTML reports
 
         <property name="phpmetrics.done" value="true"/>
     </target>
+```
+
+### jenkins post-build job configuration
         
-###jenkins post-build job configuration
-        
-######for phpmetrics.xml option:
+###### for phpmetrics.xml option:
    Plot
 
    **data series file** `build/logs/phpmetrics.xml`
@@ -1000,12 +1116,12 @@ Publish HTML reports
    **load data from xml using xpath**
    **xpath result type** number
 
-######for violations.xml option:
+###### for violations.xml option:
    Violation
 
    under pmd `build/logs/violations.xml`
 
-######for phpmetrics.html option:
+###### for phpmetrics.html option:
    sidebar-links(right under description) 
    **link url** `http://192.168.56.103:8080/job/PHPUnit/ws/build/logs/quality.html`
    **link text** `PhpMetrics report`
@@ -1014,8 +1130,9 @@ Publish HTML reports
 to understand the results have a look at: ([how-to-read-report](http://www.phpmetrics.org/documentation/how-to-read-report.html))
 
 
-##complete working solution `build.xml`
+## complete working solution `build.xml`[phpcompleteant]
 
+```xml
     <project name="name-of-project" default="full-build" basedir=".">
 
         <!--location of executables-->
@@ -1330,10 +1447,10 @@ to understand the results have a look at: ([how-to-read-report](http://www.phpme
             </fail>
         </target>
     </project>
+```
 
-
-##Gradle Version
-
+## Gradle Version[phpcompletegradle]
+```text
     ext {
     sourceDir = 'src'
     testDir = 'tests'
@@ -1404,13 +1521,14 @@ to understand the results have a look at: ([how-to-read-report](http://www.phpme
     phpcs.mustRunAfter prepare
     phpdox.mustRunAfter prepare
     phpmetrics.mustRunAfter prepare    
-        
-        
-#Java
+```
 
-##Ant Version
+        
+# Java[java]
 
-##download following .jar
+## Ant Version[javaant]
+
+## download following .jar
 
 [junit.jar](http://bit.ly/My9IXz)
 [hamcrest-core.jar](http://bit.ly/1gbl25b)
@@ -1421,7 +1539,7 @@ also download Cobertura files and unpack to `lib/`
 
 [cobertura](http://sourceforge.net/projects/cobertura/files/latest/download?source=files)
 
-##ISSUES
+## ISSUES
 cobertura:
 
 cobertura-report doesn't take multiple directories as input (such as `tests` and `src` in `folder`)
@@ -1446,8 +1564,8 @@ jdepend:
 
 This is why i replaced jdepend with `javancss`  
 
-### full `build.xml`
-
+### full `build.xml`[javacompleteant]
+```xml
     <project name="name-of-project" default="full-build" basedir=".">
 
         <!--all properties-->
@@ -1742,9 +1860,11 @@ This is why i replaced jdepend with `javancss`
         <!-- ===================== -->
 
     </project>
+```
 
-### full `build.gradle`
+### full `build.gradle`[javacompletegradle]
     
+```text    
     /*
     *
     -   for gradle only the /lib/checkstyle_styles/ is needed
@@ -1847,5 +1967,7 @@ This is why i replaced jdepend with `javancss`
     task javaDocs(type: Javadoc) {
       source = sourceSets.main.allJava
     }
+```
+
 
 
