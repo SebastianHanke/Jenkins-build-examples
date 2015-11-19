@@ -172,12 +172,6 @@ class Device extends AbstractDevice
      * Speichert einen DeviceToken für eine App.<br/>
      * Ist das Token schon vorhanden, wird es aktualisiert. Im Fehlerfall wird ein Error-Array zurückgegeben
      *
-     * @brief Speichert einen DeviceToken für eine App
-     * @author Stefan Fuchsberger
-     * @copyright DiOmega GmbH
-     * @version 1.0
-     * @since 1.0
-     *
      * @param String $sToken Token
      * @param Integer $lAppID ID der App
      * @return Array Ergebnismeldung der Speicherung
@@ -208,11 +202,6 @@ class Device extends AbstractDevice
      * Ermittelt die ID der zu den übergebenen Parametern gehörenden Devices.<br/>
      * Konnte kein Device in der Datenbank gefunden werden, so wird eines angelegt.
      *
-     * @brief Ermittelt die ID der zu den übergebenen Parametern gehörenden Devices.
-     * @author Stefan Fuchsberger
-     * @copyright DiOmega GmbH
-     * @version 1.0
-     * @since 1.0
      *
      * @param String $sToken Der Name innerhalb des Gruppentyps
      * @param Integer $lAppID Die ID der App zu der die Gruppe gehört
@@ -239,12 +228,6 @@ class Device extends AbstractDevice
     /**
      * Speichert einen DeviceToken für eine App.<br/>
      * Ist das Token schon vorhanden, wird es aktualisiert. Im Fehlerfall wird null zurückgegeben
-     *
-     * @brief Speichert einen DeviceToken für eine App
-     * @author Stefan Fuchsberger
-     * @copyright DiOmega GmbH
-     * @version 1.0
-     * @since 1.0
      *
      * @param String $sToken Token
      * @param Integer $lAppID ID der App
@@ -306,12 +289,6 @@ class Device extends AbstractDevice
      * Löscht einen DeviceToken für eine App.<br/>
      * Ist das Token nicht vorhanden, führt dies zu einer Erfolgsmeldung. Eventuelle
      * Gruppenzuordnungen werden ebenfalls gelöscht.
-     *
-     * @brief Löscht einen DeviceToken für eine App
-     * @author Stefan Fuchsberger
-     * @copyright DiOmega GmbH
-     * @version 1.0
-     * @since 1.0
      *
      * @param String $sToken Token
      * @param Integer $lAppID ID der App
