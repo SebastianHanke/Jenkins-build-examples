@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<phpdox xmlns='http://xml.phpdox.net/config'>
+    <project name="name-of-project" source="${basedir}/src" workdir="${basedir}/phpdox">
+        <collector publiconly="false">
+            <include mask="*.php" />
+        </collector>
+
+        <generator output="${basedir}/reports/api">
+            <enrich base="${basedir}/reports">
+                <source type="build" />
+                <source type="checkstyle" />
+                <source type="pmd" />
+                <source type="phploc" />
+            </enrich>
+            <build engine="html" enabled="true">
+                <file extension="html" />
+            </build>
+        </generator>
+    </project>
+</phpdox>

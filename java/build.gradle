@@ -1,0 +1,103 @@
+
+/*
+*
+*   for gradle only the /lib/checkstyle_styles/ is needed
+*   rest of lib folder is for ant version
+*
+*/
+
+plugins {
+  id "net.saliman.cobertura" version "2.2.8"
+}
+
+println '---PROJECTFOLDER---'
+println project.projectDir
+
+apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'jdepend'
+apply plugin: 'checkstyle'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['folder/src']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['folder/tests']
+        }
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+
+    /*
+    *   stevesaliman/gradle-cobertura-plugin
+    *   ClassNotFoundException on 2.2.7 but 2.2.6
+    *   https://github.com/stevesaliman/gradle-cobertura-plugin/issues/75
+    *   you need to add the following testRuntime´s
+    */
+    testRuntime 'org.slf4j:slf4j-nop:1.7.12' // for cobertura
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageReportDir = new File("$buildDir/reports/cobertura")
+}
+
+findbugs {
+    sourceSets = [sourceSets.main]
+    ignoreFailures = true
+    reportsDir = file("$buildDir/reports/findbugsReports")
+    effort = "max"
+    reportLevel = "high"
+}
+
+pmd {
+    sourceSets = [sourceSets.main]
+    ignoreFailures = true
+    reportsDir = file("$buildDir/reports/pmdReports")
+    ruleSets = [
+        'java-basic',
+        'java-braces',
+        'java-comments',
+        'java-empty',
+        'java-controversial',
+        'java-coupling',
+        'java-design',
+        'java-imports',
+        'java-logging-java',
+        'java-migrating',
+        'java-naming',
+        'java-optimizations',
+        'java-strings',
+        'java-sunsecure',
+        'java-unusedcode',
+        'java-unnecessary'
+        ]
+}
+
+jdepend {
+    sourceSets = [sourceSets.main]
+    ignoreFailures = true
+    reportsDir = file("$buildDir/reports/jdependReports")
+}
+
+checkstyle {
+    sourceSets = [sourceSets.main]
+    showViolations = false
+    reportsDir = file("$buildDir/reports/checkstyleReports")
+    configFile = file("${project.projectDir}/lib/checkstyle_styles/google_checks.xml")
+}
+
+task javaDocs(type: Javadoc) {
+  source = sourceSets.main.allJava
+}

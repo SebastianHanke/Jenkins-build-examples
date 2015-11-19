@@ -1,0 +1,70 @@
+ext {
+	sourceDir = 'src'
+	testDir = 'tests'
+	reportDir = 'build/reports'
+	apiDir = 'build/reports/api'
+}
+
+task prepare(type: Delete) {
+	delete reportDir
+	delete apiDir
+	doLast {
+		file(reportDir).mkdirs()
+		file(apiDir).mkdirs()
+	}
+}
+
+def vendorBinDir = "/home/vagrant/.composer/vendor/bin"
+def usrVendorBinDir = "/usr/bin"
+def cmdTemplate = { cmd -> vendorBinDir + '/' + cmd}
+def usrCmdTemplate = { cmd -> usrVendorBinDir + '/' + cmd}
+
+task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
+	executable cmdTemplate(name)
+		args "--count-tests", "--log-csv", "./build/reports/phploc.csv", "--log-xml", "./build/reports/phploc.xml", sourceDir, testDir
+}
+
+task pdepend(type: Exec, description: 'Calculate software metrics using PHPDepend') {
+	executable cmdTemplate(name)
+		args "--summary-xml=./build/reports/jdepend-summary.xml", "--jdepend-xml=./build/reports/jdepend.xml", "--jdepend-chart=./build/reports/pdepend-dependencies.svg", "--overview-pyramid=./build/reports/pdepend-overview-pyramid.svg", sourceDir
+}
+
+task phpmd (type : Exec, description : "Perform project mess detection using PHPMD, and Creating a log file for the Continuous Integration Server"){
+    executable cmdTemplate(name)
+		args sourceDir, "xml", "./build/phpmd.xml", "--reportfile", "./build/reports/phpmd.xml"
+}
+
+task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
+    executable cmdTemplate(name)
+		args "--log-pmd", "build/reports/pmd-cpd.xml", sourceDir
+}
+
+task phpunit (type : Exec, description : "Run unit tests with PHPUnit"){
+    executable cmdTemplate(name)
+		args "-c", "build/phpunit.xml"
+}
+
+task phpcs (type : Exec, description : "Find Coding Standard Violations using PHP_CodeSniffer"){
+    executable usrCmdTemplate(name)
+		args "--report=checkstyle", "--report-file=./build/reports/checkstyle.xml", "--standard=PSR2", "--extensions=php", "--ignore=autoload.php", sourceDir, testDir
+}
+
+task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
+    executable usrCmdTemplate(name)
+		args "-f", "build/phpdox.xml"
+}
+
+task phpmetrics (type : Exec, description : "Geenrating PHPMetrics"){
+    executable cmdTemplate(name)
+		args "--report-xml=./build/reports/phpmetrics.xml", "--violations-xml=./build/reports/violations.xml", "--report-html=./build/reports/quality.html", sourceDir
+}
+
+task fullbuild (dependsOn: [prepare, phploc, pdepend, phpmd, phpcpd, phpunit, phpcs, phpdox, phpmetrics])
+phploc.mustRunAfter prepare
+pdepend.mustRunAfter prepare
+phpmd.mustRunAfter prepare
+phpcpd.mustRunAfter prepare
+phpunit.mustRunAfter prepare
+phpcs.mustRunAfter prepare
+phpdox.mustRunAfter prepare
+phpmetrics.mustRunAfter prepare
