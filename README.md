@@ -1,7 +1,5 @@
 #Jenkins 
 
-see HTML-version [here](http://sebastianhanke.github.io/Jenkins-build-examples)
-
 ## Table of contents
 
 <!-- MarkdownTOC depth=3 autoanchor=true bracket=round -->
@@ -289,7 +287,7 @@ Enter name and choose "Free Style" project
     
 <a name="None"></a>
 ### Post-Build-actions
--> Veröffentliche JUNIT-Testergebnisse
+-> publish JUNIT-results
     Testberichte in XML-Format `**/tests/results/*.xml`
 
 -> Editable Email Notification
