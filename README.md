@@ -7,23 +7,23 @@
 
 JDK and JRE 
         
-        java -version
-        java version "1.7.0_79"
-        OpenJDK Runtime Environment (IcedTea 2.5.6) (7u79-2.5.6-0ubuntu1.14.04.1)
-        OpenJDK 64-Bit Server VM (build 24.79-b02, mixed mode)
+    java -version
+    java version "1.7.0_79"
+    OpenJDK Runtime Environment (IcedTea 2.5.6) (7u79-2.5.6-0ubuntu1.14.04.1)
+    OpenJDK 64-Bit Server VM (build 24.79-b02, mixed mode)
         
 download from http://openjdk.java.net/install/
         
-        sudo apt-get install openjdk-7-jre
-        sudo apt-get install openjdk-7-jdk
+    sudo apt-get install openjdk-7-jre
+    sudo apt-get install openjdk-7-jdk
         
 ###install Jenkins 
 ([see website](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu))  
         
-        wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-        sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-        sudo apt-get update
-        sudo apt-get install jenkins
+    wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+    sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+    sudo apt-get update
+    sudo apt-get install jenkins
     
 ###some usefull notes    
 Jenkins will be launched as a aemon up on start. See `etc/init.d/jenkins` for more details
@@ -37,33 +37,33 @@ Access this port with your browser to **start the configuration**
     
 ###jenkins browser commands
     
-        http://jenkins-installation:8080/restart
+    http://jenkins-installation:8080/restart
 
-        http://jenkins-installation:8080/exit
+    http://jenkins-installation:8080/exit
 
-        http://jenkins-installation:8080/systemInfo
+    http://jenkins-installation:8080/systemInfo
         
 ###workaround for svn connection problems
 
-        sudo nano /etc/init.d/jenkins
+    sudo nano /etc/init.d/jenkins
         
 look for the following lines
         
-            # --user in daemon doesn't prepare environment variables like HOME, USER, LOGNAME or USERNAME,
-            # so we let su do so for us now
-            $SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar $JENKINS_WAR $JENKINS_ARGS" || return 2
+    # --user in daemon doesn't prepare environment variables like HOME, USER, LOGNAME or USERNAME,
+    # so we let su do so for us now
+    $SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar $JENKINS_WAR $JENKINS_ARGS" || return 2
             
 the following should be inserted by you: `-Djsse.enableSNIExtension=false` so you get:
             
-            $SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar -Djsse.enableSNIExtension=false $JENKINS_WAR $JENKINS_ARGS" || return 2
+    $SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar -Djsse.enableSNIExtension=false $JENKINS_WAR $JENKINS_ARGS" || return 2
             
 ###fixing timezone-differences 
 
-            sudo nano /etc/default/jenkins
+    sudo nano /etc/default/jenkins
             
 insert the following there:
             
-            JAVA_ARGS="-Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Berlin"
+    JAVA_ARGS="-Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Berlin"
             
 ##JavaScript WebdriverIO-Testrunner with Mocha
             
@@ -77,27 +77,29 @@ insert the following there:
 * NodeJS
 * npm
 
-        sudo apt-get update
-        sudo apt-get install nodejs
-        sudo apt-get install npm
+    sudo apt-get update
+    sudo apt-get install nodejs
+    sudo apt-get install npm
 
 Unfortunately there is a conflict with another package from Ubuntu, therefor the NodeJS executable is named nodejs instead of node.
 Keep that in mind as you are running software, or change this with:
 
-        sudo ln -s "$(which nodejs)" /usr/bin/node
+    sudo ln -s "$(which nodejs)" /usr/bin/node
         
 with npm installed install the following modules
 
-        sudo npm install selenium-standalone@latest -g
-        sudo selenium-standalone install
+    sudo npm install selenium-standalone@latest -g
+    sudo selenium-standalone install
+
 to start the selenium-server on server startup create a symbolic link in `/etc/init.d` and configure it to run
         
-        sudo ln -s /usr/local/bin/selenium-standalone /etc/init.d/
-        sudo update-rc.d selenium-standalone defaults
+    sudo ln -s /usr/local/bin/selenium-standalone /etc/init.d/
+    sudo update-rc.d selenium-standalone defaults
+
 NOTE!!! This caused the following error in my vagrant:
 
-        ==> default: Mounting shared folders...
-            default: /vagrant => /Volumes/sebastian_TC/VM-Box-Versionen/Jenkins_Test
+    ==> default: Mounting shared folders...
+        default: /vagrant => /Volumes/sebastian_TC/VM-Box-Versionen/Jenkins_Test
         Failed to mount folders in Linux guest. This is usually because
         the "vboxsf" file system is not available. Please verify that
         the guest additions are properly installed in the guest and
@@ -114,59 +116,57 @@ NOTE!!! This caused the following error in my vagrant:
         
 on next startup selenium-server will be up automatically
 
-        sudo npm install jasmine webdriverio wdio-jasmine-framework phantomjs -g
+    sudo npm install jasmine webdriverio wdio-jasmine-framework phantomjs -g
         
 ###fixing xunit bug in webdriverio (not fixed by: 2.Oktober 2015)
 
-        sudo nano /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/Node-Default/lib/node_modules/webdriverio/lib/reporter/xunit.js
+    sudo nano /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/Node-Default/lib/node_modules/webdriverio/lib/reporter/xunit.js
         
 look for lines:
         
-        self.write(tag('testcase', {
-                    name: test.title,
-                    disabled: test.pending,
-                    time: test.time / 1000,
-                    id: test.id,
-                    file: test.file,
-                    status: Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
+    self.write(tag('testcase', {
+                name: test.title,
+                disabled: test.pending,
+                time: test.time / 1000,
+                id: test.id,
+                file: test.file,
+                status: Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
                     
 and insert `test.err &&` at status
  
-        self.write(tag('testcase', {
-                    name: test.title,
-                    disabled: test.pending,
-                    time: test.time / 1000,
-                    id: test.id,
-                    file: test.file,
-                    status: test.err && Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
+    self.write(tag('testcase', {
+                name: test.title,
+                disabled: test.pending,
+                time: test.time / 1000,
+                id: test.id,
+                file: test.file,
+                status: test.err && Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
                     
 ###configure jenkins IDE
 
-Jenkins verwalten -> Konfiguration
+configure jenkins -> system configuration
 
-  1. NodeJS Installationen
+  1. NodeJS installation
   Choose Installation `NodeJS 4.1.1`
   Global npm packages to install `webdriverio jasmine wdio-jasmine-framework phantomjs`
   
   2. Jenkins Location
   Jenkins URL e.g. http://192.168.56.103:8080/
-  Email des Systemadministrators ... fill in ...
+  Email of systemadministrator 
   
   3. Extended E-mail Notification
-  SMTP server ... fill in ...
+  SMTP server 
   Default Subject `$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!`
   Default Content `${JELLY_SCRIPT,template="html"}`
   
-###create testrunner
+###create build project
 
 Enter name and choose "Free Style" project
 
-Fill in description
-
 ###Source-Code-Managment
 -> Subversion
-    Repository URL ...fill in...
-    Credentials ...fill in...
+    Repository URL 
+    Credentials 
 -> Buildumgebung
     Provide Node & npm bin/folder to PATH ...check...
     Installation ...choose the recently created...
@@ -190,9 +190,9 @@ Fill in description
     
 ##Testing with Mocha(Chai), WebdriverIO and PhantomJS
 
-###Jenkins Konfiguration
+###Jenkins configuration
 
-NodeJS Konfigurationen
+NodeJS configuration
 
 NodeJS Version 4.1.1
 
@@ -228,77 +228,77 @@ so the shell command should look like this:
 
 ###the respective config file `wdio.conf.js`
 
-        exports.config = {
-            
-            host: '192.168.56.103',
-            port: 4444,
-            path: '/wd/hub',
+    exports.config = {
         
-            specs: [
-                './tests/scripts/webdriverio/**/*.js',
-                './tests/scripts/webdriverio/*.js'
-            ],
-            exclude: [
-                // 'path/to/excluded/files'
-            ],
-            capabilities: [{
-                browserName: 'phantomjs',
-                'phantomjs.binary.path': '/usr/local/bin/phantomjs'
-            }],
-            logLevel: 'verbose',
-            coloredLogs: true,
-            screenshotPath: './errorShots/',
-            baseUrl: 'http://the-internet.herokuapp.com',
-            waitforTimeout: 20000,
-            framework: 'mocha',
-            reporter: 'xunit',
-            reporterOptions: {
-                outputDir: './tests/results/'
-            },
-            //onPrepare: function() {
-                // do something
-            //},
-            before: function(done) {
-                console.log('before...lets get started');
-            },
-            after: function(failures, pid) {
-                console.log('after...stop everything');
-            },
-            //onComplete: function() {
-                // do something
-            //}
-        };
+        host: '192.168.56.103',
+        port: 4444,
+        path: '/wd/hub',
+    
+        specs: [
+            './tests/scripts/webdriverio/**/*.js',
+            './tests/scripts/webdriverio/*.js'
+        ],
+        exclude: [
+            // 'path/to/excluded/files'
+        ],
+        capabilities: [{
+            browserName: 'phantomjs',
+            'phantomjs.binary.path': '/usr/local/bin/phantomjs'
+        }],
+        logLevel: 'verbose',
+        coloredLogs: true,
+        screenshotPath: './errorShots/',
+        baseUrl: 'http://the-internet.herokuapp.com',
+        waitforTimeout: 20000,
+        framework: 'mocha',
+        reporter: 'xunit',
+        reporterOptions: {
+            outputDir: './tests/results/'
+        },
+        //onPrepare: function() {
+            // do something
+        //},
+        before: function(done) {
+            console.log('before...lets get started');
+        },
+        after: function(failures, pid) {
+            console.log('after...stop everything');
+        },
+        //onComplete: function() {
+            // do something
+        //}
+    };
 
 ###Testing with ES6 generators (will reduce the callback-hell... ;))
 
-The wdio test runner supports ES6 generators. Has been already tested by Sebastian.
+The wdio test runner supports ES6 generators.
 The following code therefor works as intended (with `baseUrl: 'http://the-internet.herokuapp.com'` set in wdio.config.js
 
-        "use strict"
-        var assert = require('assert');
-        
-        describe('checkboxes', function() {
-        
-            it('checkbox 2 should be enabled', function*() {
-                yield browser.url('/checkboxes');
-                yield browser.isSelected('#checkboxes input:last-Child').then(function(isSelected) {
-                    assert.equal(isSelected, true);
-                    /*expect(isSelected).toBe(true);*/
-                });
+    "use strict"
+    var assert = require('assert');
+    
+    describe('checkboxes', function() {
+    
+        it('checkbox 2 should be enabled', function*() {
+            yield browser.url('/checkboxes');
+            yield browser.isSelected('#checkboxes input:last-Child').then(function(isSelected) {
+                assert.equal(isSelected, true);
+                /*expect(isSelected).toBe(true);*/
             });
-        
-            it('checkbox 1 should be enabled after clicking on it', function*() {
-                yield browser.url('/checkboxes');
-                yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
-                    assert.equal(isSelected, false);
-                });
-                yield browser.click('#checkboxes input:first-Child');
-                yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
-                    assert.equal(isSelected, true);
-                });
-            });
-        
         });
+    
+        it('checkbox 1 should be enabled after clicking on it', function*() {
+            yield browser.url('/checkboxes');
+            yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
+                assert.equal(isSelected, false);
+            });
+            yield browser.click('#checkboxes input:first-Child');
+            yield browser.isSelected('#checkboxes input:first-Child').then(function(isSelected) {
+                assert.equal(isSelected, true);
+            });
+        });
+    
+    });
         
 ###the results will be published in `/tests/results/*.xml`
 
@@ -342,25 +342,25 @@ e.g.:
 
 #PHP
 
-###install phpunit
+##Ant Version
 
-        
+###install phpunit
 
 ###install Ant if not done by Jenkins
 
-        sudo apt-get install ant
+    sudo apt-get install ant
         
 ###otherwise go to Jenkins and configure Ant-Installation        
         
-Jenkins verwalten -> System konfigurieren-> Ant -> Ant Installationen -> Automatisch installieren
+configure Jenkins -> configure system -> Ant -> Ant installations -> install automatically
 
-Jenkins verwalten -> Plugins verwalten -> Ant plugin installieren
+configure jenkins -> configure plugins -> install Ant plugin
                 
 
             
 ####editable email notifications
 
-einrichten, um Email-Notifikationen zubekommen
+install plugin to send email notifications
 
 ---
 
@@ -370,27 +370,27 @@ einrichten, um Email-Notifikationen zubekommen
 
 ###installation on server
 
-        curl -sS https://getcomposer.org/installer | php
-        
-        sudo mv composer.phar /usr/local/bin/composer
-        
-        composer global require "phpunit/phpunit=5.0.*"
-        
-        //sudo nano ~/.bashrc
-        
-        //export PATH=$PATH:~/.composer/vendor/bin/
+    curl -sS https://getcomposer.org/installer | php
+    
+    sudo mv composer.phar /usr/local/bin/composer
+    
+    composer global require "phpunit/phpunit=5.0.*"
+    
+    //sudo nano ~/.bashrc
+    
+    //export PATH=$PATH:~/.composer/vendor/bin/
         
 ####upgrade php to 5.6
         
-        sudo apt-get -y update
-        
-        add-apt-repository ppa:ondrej/php5-5.6
-        
-        sudo apt-get -y update
-        
-        sudo apt-get -y install php5
-        
-        php -v //to verify the version
+    sudo apt-get -y update
+    
+    add-apt-repository ppa:ondrej/php5-5.6
+    
+    sudo apt-get -y update
+    
+    sudo apt-get -y install php5
+    
+    php -v //to verify the version
         
 
 ####enable php-code-coverage like 'clover'
@@ -399,13 +399,13 @@ Clover provides the metrics you need to better balance the effort between writin
 
 if not, install xdebug for phpunit
         
-        sudo pecl install xdebug
+    sudo pecl install xdebug
         
 and add this to php.ini
 
-        zend_extension=/usr/lib/php5/20121212/xdebug.so
-        
-        sudo service apache2 restart
+    zend_extension=/usr/lib/php5/20121212/xdebug.so
+    
+    sudo service apache2 restart
         
 if you encounter **The Zend Engine API version 220131226 which is installed, is newer.** then do:
 
@@ -415,33 +415,35 @@ for me it produced these instructions
 
 Download
  
-        wget http://xdebug.org/files/xdebug-2.4.0beta1.tgz
+    wget http://xdebug.org/files/xdebug-2.4.0beta1.tgz
+
 Unpack the downloaded file with 
 
-        tar -xvzf xdebug-2.4.0beta1.tgz
+    tar -xvzf xdebug-2.4.0beta1.tgz
 run:    
      
-        cd xdebug-2.4.0beta1
-        phpize (See the FAQ if you don't have phpize.
+    cd xdebug-2.4.0beta1
+    phpize (See the FAQ if you don't have phpize.
         
 As part of its output it should show:
         
-        Configuring for:
-        ...
-        Zend Module Api No:      20131226
-        Zend Extension Api No:   220131226
+    Configuring for:
+    ...
+    Zend Module Api No:      20131226
+    Zend Extension Api No:   220131226
+
 If it does not, you are using the wrong phpize. Please follow this FAQ entry and skip the next step.
         
 Run: 
         
-        ./configure
-        make
-        cp modules/xdebug.so /usr/lib/php5/20131226
-        sudo nano /etc/php5/cli/php.ini
+    ./configure
+    make
+    cp modules/xdebug.so /usr/lib/php5/20131226
+    sudo nano /etc/php5/cli/php.ini
         
 and add the line
 
-        zend_extension = /usr/lib/php5/20131226/xdebug.so
+    zend_extension = /usr/lib/php5/20131226/xdebug.so
 
 ###jenkins plugin to visualize
 
@@ -449,72 +451,72 @@ and add the line
 
 ###ant target in `build.xml`
         
-        <!--perform phpunit tests with coverage report-->
-        
-        <target name="phpunit"
-                unless="phpunit.done"
-                depends="prepare"
-                description="Run unit tests with PHPUnit">
-            <exec executable="${phpunit}" resultproperty="result.phpunit" taskname="phpunit">
-                <arg value="--configuration"/>
-                <arg path="${basedir}/build/phpunit.xml"/>
-            </exec>
-    
-            <property name="phpunit.done" value="true"/>
-        </target>
-    
-        <!--perform phpunit tests without coverage report-->
-    
-        <target name="phpunit-no-coverage"
-                unless="phpunit.done"
-                depends="prepare"
-                description="Run unit tests with PHPUnit (without generating code coverage reports)">
-            <exec executable="${phpunit}" failonerror="true" taskname="phpunit">
-                <arg value="--configuration"/>
-                <arg path="${basedir}/build/phpunit.xml"/>
-                <arg value="--no-coverage"/>
-            </exec>
-    
-            <property name="phpunit.done" value="true"/>
-        </target>
+    <!--perform phpunit tests with coverage report-->
 
-###configuration file (under `/build/phpunit.xml`)
+    <target name="phpunit"
+            unless="phpunit.done"
+            depends="prepare"
+            description="Run unit tests with PHPUnit">
+        <exec executable="${phpunit}" resultproperty="result.phpunit" taskname="phpunit">
+            <arg value="--configuration"/>
+            <arg path="${basedir}/phpunit.xml"/>
+        </exec>
 
-        <?xml version="1.0" encoding="UTF-8"?>
-        <phpunit
-                backupGlobals="false"
-                backupStaticAttributes="false"
-                strict="true"
-                verbose="true">
-            <testsuites>
-                <testsuite name="ProjectName">
-                    <directory suffix="Test.php">tests/</directory>
-                    <directory suffix="Test.php">tests/</directory>
-                </testsuite>
-            </testsuites>
-        
-            <logging>
-                <log type="coverage-html" target="coverage"/>
-                <log type="coverage-clover" target="./logs/clover.xml"/>
-                <log type="coverage-crap4j" target="./logs/crap4j.xml"/>
-                <log type="junit" target="logs/junit.xml" logIncompleteSkipped="false"/>
-            </logging>
-        
-            <filter>
-                <whitelist addUncoveredFilesFromWhitelist="true">
-                    <directory suffix=".php">src</directory>
-                    <exclude>
-                        <file>src/bootstrap.php</file>
-                    </exclude>
-                </whitelist>
-            </filter>
-        </phpunit>
+        <property name="phpunit.done" value="true"/>
+    </target>
+
+    <!--perform phpunit tests without coverage report-->
+
+    <target name="phpunit-no-coverage"
+            unless="phpunit.done"
+            depends="prepare"
+            description="Run unit tests with PHPUnit (without generating code coverage reports)">
+        <exec executable="${phpunit}" failonerror="true" taskname="phpunit">
+            <arg value="--configuration"/>
+            <arg path="${basedir}/phpunit.xml"/>
+            <arg value="--no-coverage"/>
+        </exec>
+
+        <property name="phpunit.done" value="true"/>
+    </target>
+
+###configuration file (`/phpunit.xml`)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <phpunit
+            backupGlobals="false"
+            backupStaticAttributes="false"
+            strict="true"
+            verbose="true">
+        <testsuites>
+            <testsuite name="ProjectName">
+                <directory suffix="Test.php">tests/</directory>
+                <directory suffix="Test.php">tests/</directory>
+            </testsuite>
+        </testsuites>
+
+        <logging>
+            <log type="coverage-html" target="coverage"/>
+            <log type="coverage-clover" target="reports/clover.xml"/>
+            <log type="coverage-crap4j" target="reports/crap4j.xml"/>
+            <log type="junit" target="reports/junit.xml" logIncompleteSkipped="false"/>
+        </logging>
+
+        <filter>
+            <whitelist addUncoveredFilesFromWhitelist="true">
+                <directory suffix=".php">src</directory>
+                <exclude>
+                    <file>src/bootstrap.php</file>
+                </exclude>
+            </whitelist>
+        </filter>
+    </phpunit>
 
 
 ###jenkins post-build job configuration
 
-Publish JUnit results: `**/build/logs/junit.xml`
-Publish Clover results:  **Clover XML Location** `build/logs/clover.xml`
+Publish JUnit results: `**/logs/junit.xml`
+Publish Clover results:  **Clover XML Location** `build/clover.xml`
 
 
 
@@ -525,15 +527,15 @@ Publish Clover results:  **Clover XML Location** `build/logs/clover.xml`
 
 ###installation on server
 
-        sudo pear install PHP_CodeSniffer
+    sudo pear install PHP_CodeSniffer
         
-        //command: phpcs
+    //command: phpcs
         
 ###check which coding standards are installed
 
-        phpcs -i
+    phpcs -i
         
-        //The installed coding standards are Squiz, PSR2, PSR1, PHPCS, Zend, PEAR and MySource
+    //The installed coding standards are Squiz, PSR2, PSR1, PHPCS, Zend, PEAR and MySource
         
 ###jenkins plugin to visualize
 
@@ -541,41 +543,52 @@ Publish Clover results:  **Clover XML Location** `build/logs/clover.xml`
 
 ###ant target in `build.xml`
 
-        <!--find coding standard violations using CodeSniffer (command line version)-->
-        
-        <target name="phpcs"
-                unless="phpcs.done"
-                description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
-            <exec executable="${phpcs}" taskname="phpcs">
-                <arg value="--standard=PSR2" />
-                <arg value="--standard=PSR2" />
-                <arg value="--extensions=php" />
-                <arg value="--ignore=autoload.php" />
-                <arg path="${basedir}/build/src" />
-                <arg path="${basedir}/build/tests" />
-            </exec>
-    
-            <property name="phpcs.done" value="true"/>
-        </target>
-    
-        <!--find coding standard violations usind CodeSniffer (jenkins)-->
-    
-        <target name="phpcs-ci"
-                unless="phpcs.done"
-                depends="prepare"
-                description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
-            <exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
-                <arg value="--report=checkstyle" />
-                <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-                <arg value="--standard=PSR2" />
-                <arg value="--extensions=php" />
-                <arg value="--ignore=autoload.php" />
-                <arg path="${basedir}/build/src" />
-                <arg path="${basedir}/build/tests" />
-            </exec>
-    
-            <property name="phpcs.done" value="true"/>
-        </target>
+    <!--find coding standard violations using CodeSniffer (command line version)-->
+
+    <target name="phpcs"
+            unless="phpcs.done"
+            description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${phpcs}" taskname="phpcs">
+            <arg value="--standard=PSR2" />
+            <arg value="&#45;&#45;standard=PHPCS" />
+            <arg value="&#45;&#45;standard=Zend" />
+            <arg value="&#45;&#45;standard=PEAR" />
+            <arg value="&#45;&#45;standard=MySource" />
+            <arg value="&#45;&#45;standard=PSR1" />
+            <arg value="&#45;&#45;standard=Squiz" />
+            <arg value="--extensions=php" />
+            <arg value="--ignore=autoload.php" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phpcs.done" value="true"/>
+    </target>
+
+    <!--find coding standard violations usind CodeSniffer (jenkins)-->
+
+    <target name="phpcs-ci"
+            unless="phpcs.done"
+            depends="prepare"
+            description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+            <arg value="--standard=PSR2" />
+            <arg value="&#45;&#45;standard=PHPCS" />
+            <arg value="&#45;&#45;standard=Zend" />
+            <arg value="&#45;&#45;standard=PEAR" />
+            <arg value="&#45;&#45;standard=MySource" />
+            <arg value="&#45;&#45;standard=PSR1" />
+            <arg value="&#45;&#45;standard=Squiz" />-->
+            <arg value="--extensions=php" />
+            <arg value="--ignore=autoload.php" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phpcs.done" value="true"/>
+    </target>
         
 ###configuration file (under `build/ruleset.xml`)
         
@@ -597,9 +610,9 @@ Checkstyle: `**/build/logs/checkstyle.xml`
    
 ###installation on server   
   
-        composer global require 'phploc/phploc=*'
+    composer global require 'phploc/phploc=*'
 
-        //command: phploc
+    //command: phploc
         
 ###jenkins plugin to visualize
 
@@ -607,38 +620,36 @@ Checkstyle: `**/build/logs/checkstyle.xml`
 
 ###ant target in `build.xml`
 
-        <!--count lines of code (command line usage)-->
-        
-        <target name="phploc"
-                unless="phploc.done"
-                description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
-            <exec executable="${phploc}" taskname="phploc">
-                <arg value="--count-tests" />
-                <arg path="${basedir}/build/src" />
-                <arg path="${basedir}/build/tests" />
-            </exec>
-    
-            <property name="phploc.done" value="true"/>
-        </target>
-    
-        <!--count lines of code (jenkins)-->
-    
-        <target name="phploc-ci"
-                unless="phploc.done"
-                depends="prepare"
-                description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
-            <exec executable="${phploc}" taskname="phploc">
-                <arg value="--count-tests" />
-                <arg value="--log-csv" />
-                <arg path="${basedir}/build/logs/phploc.csv" />
-                <arg value="--log-xml" />
-                <arg path="${basedir}/build/logs/phploc.xml" />
-                <arg path="${basedir}/build/src" />
-                <arg path="${basedir}/build/tests" />
-            </exec>
-    
-            <property name="phploc.done" value="true"/>
-        </target>
+    <target name="phploc"
+            unless="phploc.done"
+            description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
+        <exec executable="${phploc}" taskname="phploc">
+            <arg value="--count-tests" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phploc.done" value="true"/>
+    </target>
+
+    <!--count lines of code (jenkins)-->
+
+    <target name="phploc-ci"
+            unless="phploc.done"
+            depends="prepare"
+            description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phploc}" taskname="phploc">
+            <arg value="--count-tests" />
+            <arg value="--log-csv" />
+            <arg path="${basedir}/build/logs/phploc.csv" />
+            <arg value="--log-xml" />
+            <arg path="${basedir}/build/logs/phploc.xml" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phploc.done" value="true"/>
+    </target>
         
 ###jenkins post-build job configuration
 
@@ -654,33 +665,32 @@ Plot:
 
 ###installation on server   
 
-        composer global require 'pdepend/pdepend=*'
+    composer global require 'pdepend/pdepend=*'
         
-        //command: pdepend
+    //command: pdepend
         
 ###jenkins plugin to visualize
 
 [JDepend](http://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin)
 
-###ant target in `build.xml`
-        
+###ant target in `build.xml`      
 
-        <!--performs static code analysis on a given source base, the sum of some statements or code fragments found in the analyzed source-->
-        
-        <target name="pdepend"
-                unless="pdepend.done"
-                depends="prepare"
-                description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
-            <exec executable="${pdepend}" taskname="pdepend">
-                <arg value="--summary-xml=${basedir}/build/logs/jdepend.xml" />
-                <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-                <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
-                <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-                <arg path="${basedir}/build/src" />
-            </exec>
-    
-            <property name="pdepend.done" value="true"/>
-        </target>
+    <!--performs static code analysis on a given source base, the sum of some statements or code fragments found in the analyzed source-->
+
+    <target name="pdepend"
+            unless="pdepend.done"
+            depends="prepare"
+            description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${pdepend}" taskname="pdepend">
+            <arg value="--summary-xml=${basedir}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="pdepend.done" value="true"/>
+    </target>
    
 ###jenkins post-build job configuration
 
@@ -692,10 +702,10 @@ Report JDepend
         
 in project description insert 
 
-        <img type="image/svg+xml" height="300" src="ws/build/pdepend/overview-pyramid.svg" width="500"></img>
-        <img type="image/svg+xml" height="300" src="ws/build/pdepend/dependencies.svg" width="500"></img>
+    <img type="image/svg+xml" height="300" src="ws/build/pdepend/overview-pyramid.svg" width="500"></img>
+    <img type="image/svg+xml" height="300" src="ws/build/pdepend/   dependencies.svg" width="500"></img>
 
-Jenkins is probably configured to text, therefor 
+Jenkins is probably configured to text, therefor: 
 
 configure jenkins -> global security -> change markup to html
         
@@ -712,9 +722,9 @@ configure jenkins -> global security -> change markup to html
 
 ###installation on server  
 
-        composer global require 'phpmd/phpmd=*'
+    composer global require 'phpmd/phpmd=*'
                 
-        //command: phpmd
+    //command: phpmd
    
 ###jenkins plugin to visualize
 
@@ -722,50 +732,94 @@ configure jenkins -> global security -> change markup to html
 
 ###ant target in `build.xml`
         
-        !--perform mess detection (command line version)-->
-        
-        <target name="phpmd"
-                unless="phpmd.done"
-                description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-            <exec executable="${phpmd}" taskname="phpmd">
-                <arg path="${basedir}/build/src" />
-                <arg value="text" />
-                <arg path="${basedir}/build/phpmd.xml" />
-            </exec>
-    
-            <property name="phpmd.done" value="true"/>
-        </target>
-    
-        <!--perform mess detection (jenkins)-->
-    
-        <target name="phpmd-ci"
-                unless="phpmd.done"
-                depends="prepare"
-                description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
-            <exec executable="${phpmd}" taskname="phpmd">
-                <arg path="${basedir}/build/src" />
-                <arg value="xml" />
-                <arg path="${basedir}/build/phpmd.xml" />
-                <arg value="--reportfile" />
-                <arg path="${basedir}/build/logs/pmd.xml" />
-            </exec>
-    
-            <property name="phpmd.done" value="true"/>
-        </target>
+    <!--perform mess detection (command line version)-->
+
+    <target name="phpmd"
+            unless="phpmd.done"
+            description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${phpmd}" taskname="phpmd">
+            <arg path="${basedir}/src" />
+            <arg value="text" />
+            <arg path="${basedir}/phpmd.xml" />
+        </exec>
+
+        <property name="phpmd.done" value="true"/>
+    </target>
+
+    <!--perform mess detection (jenkins)-->
+
+    <target name="phpmd-ci"
+            unless="phpmd.done"
+            depends="prepare"
+            description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phpmd}" taskname="phpmd">
+            <arg path="${basedir}/src" />
+            <arg value="xml" />
+            <arg path="${basedir}/phpmd.xml" />
+            <arg value="--reportfile" />
+            <arg path="${basedir}/build/logs/pmd.xml" />
+        </exec>
+
+        <property name="phpmd.done" value="true"/>
+    </target>
         
 ###configuration file (under `build/phpmd.xml`)
 
-        <ruleset name="name-of-your-coding-standard"
-                 xmlns="http://pmd.sf.net/ruleset/1.0.0"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
-                              http://pmd.sf.net/ruleset_xml_schema.xsd"
-                 xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
-            <description>Description of your coding standard</description>
-        
-            <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
-            <!-- ... -->
-        </ruleset>
+    <ruleset name="names-of-your-coding-standard"
+             xmlns="http://pmd.sf.net/ruleset/1.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
+                          http://pmd.sf.net/ruleset_xml_schema.xsd"
+             xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+        <description>Description of your coding standard</description>
+
+        <!--The Code Size Ruleset contains a collection of rules that find code size related problems.-->
+        <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
+        <rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
+        <rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
+        <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
+        <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
+        <rule ref="rulesets/codesize.xml/TooManyFields" />
+        <rule ref="rulesets/codesize.xml/TooManyMethods" />
+        <rule ref="rulesets/codesize.xml/TooManyPublicMethods" />
+        <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity" />
+
+        <!--The Unused Code Ruleset contains a collection of rules that find unused code.-->
+        <rule ref="rulesets/unusedcode.xml/UnusedPrivateField" />
+        <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable" />
+        <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
+        <rule ref="rulesets/unusedcode.xml/UnusedFormalParameter" />
+
+        <!--The Clean Code ruleset contains rules that enforce a clean code base. This includes rules from SOLID and object calisthenics.-->
+        <rule ref="rulesets/cleancode.xml/BooleanArgumentFlag" />
+        <rule ref="rulesets/cleancode.xml/ElseExpression" />
+        <rule ref="rulesets/cleancode.xml/StaticAccess" />
+
+        <!--The Code Size Ruleset contains a collection of rules that find software design related problems.-->
+        <rule ref="rulesets/design.xml/ExitExpression" />
+        <rule ref="rulesets/design.xml/EvalExpression" />
+        <rule ref="rulesets/design.xml/GotoStatement" />
+        <rule ref="rulesets/design.xml/NumberOfChildren" />
+        <rule ref="rulesets/design.xml/DepthOfInheritance" />
+        <rule ref="rulesets/design.xml/CouplingBetweenObjects" />
+
+        <!--The Naming Ruleset contains a collection of rules about names - too long, too short, and so forth.-->
+        <rule ref="rulesets/naming.xml/ShortVariable" />
+        <rule ref="rulesets/naming.xml/LongVariable" />
+        <rule ref="rulesets/naming.xml/ShortMethodName" />
+        <rule ref="rulesets/naming.xml/ConstructorWithNameAsEnclosingClass" />
+        <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
+        <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
+
+        <!--This ruleset contains a collection of controversial rules.-->
+        <rule ref="rulesets/controversial.xml/Superglobals" />
+        <rule ref="rulesets/controversial.xml/CamelCaseClassName" />
+        <rule ref="rulesets/controversial.xml/CamelCasePropertyName" />
+        <rule ref="rulesets/controversial.xml/CamelCaseMethodName" />
+        <rule ref="rulesets/controversial.xml/CamelCaseParameterName" />
+        <rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
+
+    </ruleset>
         
 ###jenkins post-build job configuration
 
@@ -779,9 +833,9 @@ Report PMD anylsis
 
 ###installation on server  
         
-        composer global require "sebastian/phpcpd=*"
+    composer global require "sebastian/phpcpd=*"
         
-        //command: phpcpd
+    //command: phpcpd
         
 ###jenkins plugin to visualize
 
@@ -789,32 +843,32 @@ Report PMD anylsis
 
 ###ant target in `build.xml`
         
-        <!--find duplicate code (command line version)-->
-        
-        <target name="phpcpd"
-                unless="phpcpd.done"
-                description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
-            <exec executable="${phpcpd}" taskname="phpcpd">
-                <arg path="${basedir}/build/src" />
-            </exec>
-    
-            <property name="phpcpd.done" value="true"/>
-        </target>
-    
-        <!--find duplicate code (jenkins)-->
-    
-        <target name="phpcpd-ci"
-                unless="phpcpd.done"
-                depends="prepare"
-                description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
-            <exec executable="${phpcpd}" taskname="phpcpd">
-                <arg value="--log-pmd" />
-                <arg path="${basedir}/build/logs/pmd-cpd.xml" />
-                <arg path="${basedir}/build/src" />
-            </exec>
-    
-            <property name="phpcpd.done" value="true"/>
-        </target>
+    <!--find duplicate code (command line version)-->
+
+    <target name="phpcpd"
+            unless="phpcpd.done"
+            description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${phpcpd}" taskname="phpcpd">
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="phpcpd.done" value="true"/>
+    </target>
+
+    <!--find duplicate code (jenkins)-->
+
+    <target name="phpcpd-ci"
+            unless="phpcpd.done"
+            depends="prepare"
+            description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phpcpd}" taskname="phpcpd">
+            <arg value="--log-pmd" />
+            <arg path="${basedir}/build/logs/pmd-cpd.xml" />
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="phpcpd.done" value="true"/>
+    </target>
  
 ###jenkins post-build job configuration
 
@@ -828,14 +882,14 @@ Report Duplicate Code Scanner results
 
 ###installation on server  
         
-        wget https://github.com/theseer/phpdox/releases/download/0.8.0/phpdox-0.8.0.phar
+    wget https://github.com/theseer/phpdox/releases/download/0.8.0/phpdox-0.8.0.phar
         
-        chmod +x phpdox-0.8.0.phar
+    chmod +x phpdox-0.8.0.phar
         
-        sudo mv phpdox-0.8.0.phar /usr/bin/phpdox
+    sudo mv phpdox-0.8.0.phar /usr/bin/phpdox
         
-        //if not installed:
-        sudo apt-get install php5-xsl
+    //if not installed:
+    sudo apt-get install php5-xsl
         
 ###jenkins plugin to visualize
 
@@ -843,37 +897,37 @@ Report Duplicate Code Scanner results
 
 ###ant target in `build.xml`
         
-        <target name="phpdox"
-                unless="phpdox.done"
-                depends="phploc-ci,phpcs-ci,phpmd-ci"
-                description="Generate project documentation using phpDox">
-            <exec executable="${phpdox}" dir="${basedir}/build" taskname="phpdox"/>
-    
-            <property name="phpdox.done" value="true"/>
-        </target>
+    <target name="phpdox"
+            unless="phpdox.done"
+            depends="phploc-ci,phpcs-ci,phpmd-ci"
+            description="Generate project documentation using phpDox">
+        <exec executable="${phpdox}" dir="${basedir}" taskname="phpdox"/>
+
+        <property name="phpdox.done" value="true"/>
+    </target>
         
 ###configuration file (under `build/phpdox.xml`)
 
-        <?xml version="1.0"?>
-        <phpdox xmlns='http://xml.phpdox.net/config'>
-            <project name="name-of-project" source="${basedir}/src" workdir="${basedir}/phpdox">
-                <collector publiconly="false">
-                    <include mask="*.php" />
-                </collector>
-        
-                <generator output="${basedir}/api">
-                    <enrich base="${basedir}/logs">
-                        <source type="build" />
-                        <source type="checkstyle" />
-                        <source type="pmd" />
-                        <source type="phploc" />
-                    </enrich>
-                    <build engine="html" enabled="true">
-                        <file extension="html" />
-                    </build>
-                </generator>
-            </project>
-        </phpdox>
+    <?xml version="1.0"?>
+    <phpdox xmlns='http://xml.phpdox.net/config'>
+        <project name="name-of-project" source="${basedir}/src" workdir="${basedir}/phpdox">
+            <collector publiconly="false">
+                <include mask="*.php" />
+            </collector>
+
+            <generator output="${basedir}/reports/api">
+                <enrich base="${basedir}/reports">
+                    <source type="build" />
+                    <source type="checkstyle" />
+                    <source type="pmd" />
+                    <source type="phploc" />
+                </enrich>
+                <build engine="html" enabled="true">
+                    <file extension="html" />
+                </build>
+            </generator>
+        </project>
+    </phpdox>
         
 ###jenkins post-build job configuration
 
@@ -887,9 +941,9 @@ Publish HTML reports
         
 ###PHP_CodeBrowser (not in use!)
         
-        composer global require "mayflower/php-codebrowser=~1.1"
+    composer global require "mayflower/php-codebrowser=~1.1"
         
-        //command: phpcb
+    //command: phpcb
         
 ---
 
@@ -897,9 +951,9 @@ Publish HTML reports
 
 ###installation on server  
 
-        composer global require "halleck45/phpmetrics"
+    composer global require "halleck45/phpmetrics"
         
-        //command: phpmetrics
+    //command: phpmetrics
         
 ###jenkins plugin to visualize
 
@@ -921,18 +975,20 @@ Publish HTML reports
 
 ###ant target in `build.xml`
         
-        <target name="phpmetrics"
-                unless="phpmetrics.done"
-                description="generate phpmetrics reports">
-            <exec executable="${phpmetrics}" taskname="phpmetrics">
-                <arg value="--report-xml=${basedir}/build/logs/phpmetrics.xml"/>
-                <arg value="--violations-xml=${basedir}/build/logs/violations.xml"/>
-                <arg value="--report-html=${basedir}/build/logs/quality.html"/>
-                <arg path="${basedir}/build/src"/>
-            </exec>
-    
-            <property name="phpmetrics.done" value="true"/>
-        </target>
+    <!--generate documentation-->
+
+    <target name="phpmetrics"
+            unless="phpmetrics.done"
+            description="generate phpmetrics reports">
+        <exec executable="${phpmetrics}" taskname="phpmetrics">
+            <arg value="--report-xml=${basedir}/build/logs/phpmetrics.xml"/>
+            <arg value="--violations-xml=${basedir}/build/logs/violations.xml"/>
+            <arg value="--report-html=${basedir}/build/logs/quality.html"/>
+            <arg path="${basedir}/src"/>
+        </exec>
+
+        <property name="phpmetrics.done" value="true"/>
+    </target>
         
 ###jenkins post-build job configuration
         
@@ -960,322 +1016,399 @@ to understand the results have a look at: ([how-to-read-report](http://www.phpme
 
 ##complete working solution `build.xml`
 
-        <project name="name-of-project" default="full-build" basedir=".">
-        
-            <!--location of executables-->
-            <property name="pdepend" value="/home/vagrant/.composer/vendor/bin/pdepend"/>
-            <property name="phpcpd" value="/home/vagrant/.composer/vendor/bin/phpcpd"/>
-            <property name="phploc" value="/home/vagrant/.composer/vendor/bin/phploc"/>
-            <property name="phpunit" value="/home/vagrant/.composer/vendor/bin/phpunit"/>
-            <property name="phpmd" value="/home/vagrant/.composer/vendor/bin/phpmd"/>
-            <property name="phpdox" value="/usr/bin/phpdox"/>
-            <property name="phpcs" value="/usr/bin/phpcs"/>
-            <property name="phpmetrics" value="/home/vagrant/.composer/vendor/bin/phpmetrics"/>
-            <!--<property name="phpcb" value="/home/vagrant/.composer/vendor/bin/phpcb"/>-->
-        
-        
-            <target name="full-build"
-                    depends="prepare, static-analysis, phpunit,phpdox,phpmetrics, -check-failure"
-                    description="Performs static analysis, runs tests and generates project dpcumentation">
-            </target>
-        
-            <target name="full-build-parallel"
-                    depends="prepare,static-analysis-parallel,phpunit,phpdox,phpmetrics, -check-failure"
-                    description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation">
-            </target>
-        
-            <target name="quick-build"
-                    depends="prepare, lint, phpunit-no-coverage"
-                    description="Performs a lint check and runs tests without generating codce coverage reports">
-            </target>
-        
-            <target name="static-analysis"
-                    depends="lint, phploc-ci, pdepend, phpmd-ci, phpcs-ci, phpcpd-ci"
-                    description="Performs static analysis">
-            </target>
-        
-            <target name="static-analysis-parallel"
-                    description="Performs static analysis (executing the tools in parallel)">
-                <parallel threadCount="2">
-                    <sequential>
-                        <antcall target="pdepend"/>
-                        <antcall target="phpmd-ci"/>
-                    </sequential>
-                    <antcall target="lint"/>
-                    <antcall target="phpcpd-ci"/>
-                    <antcall target="phpcs-ci"/>
-                    <antcall target="phploc-ci"/>
-                </parallel>
-            </target>
-        
-            <!--remove directories of previous builds-->
-        
-            <target name="clean"
-                    unless="clean.done"
-                    description="Cleanup build artifacts">
-                <delete dir="${basedir}/build/api"/>
-                <delete dir="${basedir}/build/coverage"/>
-                <delete dir="${basedir}/build/logs"/>
-                <delete dir="${basedir}/build/pdepend"/>
-                <delete dir="${basedir}/build/phpdox"/>
-                <property name="clean.done" value="true"/>
-            </target>
-        
-            <!--create directories for logs, coverage etc.-->
-        
-            <target name="prepare"
-                    unless="prepare.done"
-                    depends="clean"
-                    description="Prepare for build">
-                <mkdir dir="${basedir}/build/api"/>
-                <mkdir dir="${basedir}/build/coverage"/>
-                <mkdir dir="${basedir}/build/logs"/>
-                <mkdir dir="${basedir}/build/pdepend"/>
-                <mkdir dir="${basedir}/build/phpdox"/>
-                <property name="prepare.done" value="true"/>
-            </target>
-        
-            <!--perform syntax check of source-code with php -l-->
-        
-            <target name="lint"
-                    unless="lint.done"
-                    description="Perform syntax check of sourcecode files">
-                <apply executable="php" taskname="lint">
-                    <arg value="-l" />
-        
-                    <fileset dir="${basedir}/build/src">
-                        <include name="**/*.php" />
-                        <modified />
-                    </fileset>
-        
-                    <fileset dir="${basedir}/build/tests">
-                        <include name="**/*.php" />
-                        <modified />
-                    </fileset>
-                </apply>
-        
-                <property name="lint.done" value="true"/>
-            </target>
-        
-            <!--count lines of code (command line usage)-->
-        
-            <target name="phploc"
-                    unless="phploc.done"
-                    description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
-                <exec executable="${phploc}" taskname="phploc">
-                    <arg value="--count-tests" />
-                    <arg path="${basedir}/build/src" />
-                    <arg path="${basedir}/build/tests" />
-                </exec>
-        
-                <property name="phploc.done" value="true"/>
-            </target>
-        
-            <!--count lines of code (jenkins)-->
-        
-            <target name="phploc-ci"
-                    unless="phploc.done"
-                    depends="prepare"
-                    description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
-                <exec executable="${phploc}" taskname="phploc">
-                    <arg value="--count-tests" />
-                    <arg value="--log-csv" />
-                    <arg path="${basedir}/build/logs/phploc.csv" />
-                    <arg value="--log-xml" />
-                    <arg path="${basedir}/build/logs/phploc.xml" />
-                    <arg path="${basedir}/build/src" />
-                    <arg path="${basedir}/build/tests" />
-                </exec>
-        
-                <property name="phploc.done" value="true"/>
-            </target>
-        
-            <!--performs static code analysis on a given source base, the sum of some statements or code fragments found in the analyzed source-->
-        
-            <target name="pdepend"
-                    unless="pdepend.done"
-                    depends="prepare"
-                    description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
-                <exec executable="${pdepend}" taskname="pdepend">
-                    <arg value="--summary-xml=${basedir}/build/logs/jdepend.xml" />
-                    <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-                    <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
-                    <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-                    <arg path="${basedir}/build/src" />
-                </exec>
-        
-                <property name="pdepend.done" value="true"/>
-            </target>
-        
-            <!--perform mess detection (command line version)-->
-        
-            <target name="phpmd"
-                    unless="phpmd.done"
-                    description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-                <exec executable="${phpmd}" taskname="phpmd">
-                    <arg path="${basedir}/build/src" />
-                    <arg value="text" />
-                    <arg path="${basedir}/build/phpmd.xml" />
-                </exec>
-        
-                <property name="phpmd.done" value="true"/>
-            </target>
-        
-            <!--perform mess detection (jenkins)-->
-        
-            <target name="phpmd-ci"
-                    unless="phpmd.done"
-                    depends="prepare"
-                    description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
-                <exec executable="${phpmd}" taskname="phpmd">
-                    <arg path="${basedir}/build/src" />
-                    <arg value="xml" />
-                    <arg path="${basedir}/build/phpmd.xml" />
-                    <arg value="--reportfile" />
-                    <arg path="${basedir}/build/logs/pmd.xml" />
-                </exec>
-        
-                <property name="phpmd.done" value="true"/>
-            </target>
-        
-            <!--find coding standard violations using CodeSniffer (command line version)-->
-        
-            <target name="phpcs"
-                    unless="phpcs.done"
-                    description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
-                <exec executable="${phpcs}" taskname="phpcs">
-                    <arg value="--standard=PSR2" />
-                    <arg value="--standard=PSR2" />
-                    <arg value="--extensions=php" />
-                    <arg value="--ignore=autoload.php" />
-                    <arg path="${basedir}/build/src" />
-                    <arg path="${basedir}/build/tests" />
-                </exec>
-        
-                <property name="phpcs.done" value="true"/>
-            </target>
-        
-            <!--find coding standard violations usind CodeSniffer (jenkins)-->
-        
-            <target name="phpcs-ci"
-                    unless="phpcs.done"
-                    depends="prepare"
-                    description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
-                <exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
-                    <arg value="--report=checkstyle" />
-                    <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-                    <arg value="--standard=PSR2" />
-                    <arg value="--extensions=php" />
-                    <arg value="--ignore=autoload.php" />
-                    <arg path="${basedir}/build/src" />
-                    <arg path="${basedir}/build/tests" />
-                </exec>
-        
-                <property name="phpcs.done" value="true"/>
-            </target>
-        
-            <!--find duplicate code (command line version)-->
-        
-            <target name="phpcpd"
-                    unless="phpcpd.done"
-                    description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
-                <exec executable="${phpcpd}" taskname="phpcpd">
-                    <arg path="${basedir}/build/src" />
-                </exec>
-        
-                <property name="phpcpd.done" value="true"/>
-            </target>
-        
-            <!--find duplicate code (jenkins)-->
-        
-            <target name="phpcpd-ci"
-                    unless="phpcpd.done"
-                    depends="prepare"
-                    description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
-                <exec executable="${phpcpd}" taskname="phpcpd">
-                    <arg value="--log-pmd" />
-                    <arg path="${basedir}/build/logs/pmd-cpd.xml" />
-                    <arg path="${basedir}/build/src" />
-                </exec>
-        
-                <property name="phpcpd.done" value="true"/>
-            </target>
-        
-        
-            <!--perform phpunit tests with coverage report-->
-        
-            <target name="phpunit"
-                    unless="phpunit.done"
-                    depends="prepare"
-                    description="Run unit tests with PHPUnit">
-                <exec executable="${phpunit}" resultproperty="result.phpunit" taskname="phpunit">
-                    <arg value="--configuration"/>
-                    <arg path="${basedir}/build/phpunit.xml"/>
-                </exec>
-        
-                <property name="phpunit.done" value="true"/>
-            </target>
-        
-            <!--perform phpunit tests without coverage report-->
-        
-            <target name="phpunit-no-coverage"
-                    unless="phpunit.done"
-                    depends="prepare"
-                    description="Run unit tests with PHPUnit (without generating code coverage reports)">
-                <exec executable="${phpunit}" failonerror="true" taskname="phpunit">
-                    <arg value="--configuration"/>
-                    <arg path="${basedir}/build/phpunit.xml"/>
-                    <arg value="--no-coverage"/>
-                </exec>
-        
-                <property name="phpunit.done" value="true"/>
-            </target>
-        
-            <!-- phpcb should be called after xml file generation -->
-           <!-- <target name="phpcb">
-                <exec executable="${phpcb}">
-                    <arg line="&#45;&#45;log '${basedir}/build/logs/'
-                           &#45;&#45;output '${basedir}/build/'
-                           &#45;&#45;source '${basedir}/build/src/'" />
-                </exec>
-            </target>-->
-            <!--generate documentation-->
-        
-            <target name="phpmetrics"
-                    unless="phpmetrics.done"
-                    description="generate phpmetrics reports">
-                <exec executable="${phpmetrics}" taskname="phpmetrics">
-                    <arg value="--report-xml=${basedir}/build/logs/phpmetrics.xml"/>
-                    <arg value="--violations-xml=${basedir}/build/logs/violations.xml"/>
-                    <arg value="--report-html=${basedir}/build/logs/quality.html"/>
-                    <arg path="${basedir}/build/src"/>
-                </exec>
-        
-                <property name="phpmetrics.done" value="true"/>
-            </target>
-        
-            <target name="phpdox"
-                    unless="phpdox.done"
-                    depends="phploc-ci,phpcs-ci,phpmd-ci"
-                    description="Generate project documentation using phpDox">
-                <exec executable="${phpdox}" dir="${basedir}/build" taskname="phpdox"/>
-        
-                <property name="phpdox.done" value="true"/>
-            </target>
-        
-            <target name="-check-failure">
-                <fail message="PHPUnit did not finish successfully">
-                    <condition>
-                        <not>
-                            <equals arg1="${result.phpunit}" arg2="0"/>
-                        </not>
-                    </condition>
-                </fail>
-            </target>
-        </project>
+    <project name="name-of-project" default="full-build" basedir=".">
+
+        <!--location of executables-->
+        <property name="pdepend" value="/home/vagrant/.composer/vendor/bin/pdepend"/>
+        <property name="phpcpd" value="/home/vagrant/.composer/vendor/bin/phpcpd"/>
+        <property name="phploc" value="/home/vagrant/.composer/vendor/bin/phploc"/>
+        <property name="phpunit" value="/home/vagrant/.composer/vendor/bin/phpunit"/>
+        <property name="phpmd" value="/home/vagrant/.composer/vendor/bin/phpmd"/>
+        <property name="phpdox" value="/usr/bin/phpdox"/>
+        <property name="phpcs" value="/usr/bin/phpcs"/>
+        <property name="phpmetrics" value="/home/vagrant/.composer/vendor/bin/phpmetrics"/>
+
+        <target name="full-build"
+                depends="prepare, static-analysis, phpunit,phpdox,phpmetrics, -check-failure"
+                description="Performs static analysis, runs tests and generates project dpcumentation">
+        </target>
+
+        <target name="full-build-parallel"
+                depends="prepare,static-analysis-parallel,phpunit,phpdox,phpmetrics, -check-failure"
+                description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation">
+        </target>
+
+        <target name="quick-build"
+                depends="prepare, lint, phpunit-no-coverage"
+                description="Performs a lint check and runs tests without generating codce coverage reports">
+        </target>
+
+        <target name="static-analysis"
+                depends="lint, phploc-ci, pdepend, phpmd-ci, phpcs-ci, phpcpd-ci"
+                description="Performs static analysis">
+        </target>
+
+        <target name="static-analysis-parallel"
+                description="Performs static analysis (executing the tools in parallel)">
+            <parallel threadCount="2">
+                <sequential>
+                    <antcall target="pdepend"/>
+                    <antcall target="phpmd-ci"/>
+                </sequential>
+                <antcall target="lint"/>
+                <antcall target="phpcpd-ci"/>
+                <antcall target="phpcs-ci"/>
+                <antcall target="phploc-ci"/>
+            </parallel>
+        </target>
+
+        <!--remove directories of previous builds-->
+
+        <target name="clean"
+                unless="clean.done"
+                description="Cleanup build artifacts">
+            <delete dir="${basedir}/build/api"/>
+            <delete dir="${basedir}/build/coverage"/>
+            <delete dir="${basedir}/build/logs"/>
+            <delete dir="${basedir}/build/pdepend"/>
+            <delete dir="${basedir}/build/phpdox"/>
+            <property name="clean.done" value="true"/>
+        </target>
+
+        <!--create directories for logs, coverage etc.-->
+
+        <target name="prepare"
+                unless="prepare.done"
+                depends="clean"
+                description="Prepare for build">
+            <mkdir dir="${basedir}/build/api"/>
+            <mkdir dir="${basedir}/build/coverage"/>
+            <mkdir dir="${basedir}/build/logs"/>
+            <mkdir dir="${basedir}/build/pdepend"/>
+            <mkdir dir="${basedir}/build/phpdox"/>
+            <property name="prepare.done" value="true"/>
+        </target>
+
+        <!--perform syntax check of source-code with php -l-->
+
+        <target name="lint"
+                unless="lint.done"
+                description="Perform syntax check of sourcecode files">
+            <apply executable="php" taskname="lint">
+                <arg value="-l" />
+
+                <fileset dir="${basedir}/build/src">
+                    <include name="**/*.php" />
+                    <modified />
+                </fileset>
+
+                <fileset dir="${basedir}/build/tests">
+                    <include name="**/*.php" />
+                    <modified />
+                </fileset>
+            </apply>
+
+            <property name="lint.done" value="true"/>
+        </target>
+
+        <!--count lines of code (command line usage)-->
+
+        <target name="phploc"
+                unless="phploc.done"
+                description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
+            <exec executable="${phploc}" taskname="phploc">
+                <arg value="--count-tests" />
+                <arg path="${basedir}/src" />
+                <arg path="${basedir}/tests" />
+            </exec>
+
+            <property name="phploc.done" value="true"/>
+        </target>
+
+        <!--count lines of code (jenkins)-->
+
+        <target name="phploc-ci"
+                unless="phploc.done"
+                depends="prepare"
+                description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
+            <exec executable="${phploc}" taskname="phploc">
+                <arg value="--count-tests" />
+                <arg value="--log-csv" />
+                <arg path="${basedir}/build/logs/phploc.csv" />
+                <arg value="--log-xml" />
+                <arg path="${basedir}/build/logs/phploc.xml" />
+                <arg path="${basedir}/src" />
+                <arg path="${basedir}/tests" />
+            </exec>
+
+            <property name="phploc.done" value="true"/>
+        </target>
+
+        <!--performs static code analysis on a given source base, the sum of some statements or code fragments found in the analyzed source-->
+
+        <target name="pdepend"
+                unless="pdepend.done"
+                depends="prepare"
+                description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
+            <exec executable="${pdepend}" taskname="pdepend">
+                <arg value="--summary-xml=${basedir}/build/logs/jdepend.xml" />
+                <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+                <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+                <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+                <arg path="${basedir}/src" />
+            </exec>
+
+            <property name="pdepend.done" value="true"/>
+        </target>
+
+        <!--perform mess detection (command line version)-->
+
+        <target name="phpmd"
+                unless="phpmd.done"
+                description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+            <exec executable="${phpmd}" taskname="phpmd">
+                <arg path="${basedir}/src" />
+                <arg value="text" />
+                <arg path="${basedir}/phpmd.xml" />
+            </exec>
+
+            <property name="phpmd.done" value="true"/>
+        </target>
+
+        <!--perform mess detection (jenkins)-->
+
+        <target name="phpmd-ci"
+                unless="phpmd.done"
+                depends="prepare"
+                description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+            <exec executable="${phpmd}" taskname="phpmd">
+                <arg path="${basedir}/src" />
+                <arg value="xml" />
+                <arg path="${basedir}/phpmd.xml" />
+                <arg value="--reportfile" />
+                <arg path="${basedir}/build/logs/pmd.xml" />
+            </exec>
+
+            <property name="phpmd.done" value="true"/>
+        </target>
+
+        <!--find coding standard violations using CodeSniffer (command line version)-->
+
+        <target name="phpcs"
+                unless="phpcs.done"
+                description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+            <exec executable="${phpcs}" taskname="phpcs">
+                <arg value="--standard=PSR2" />
+    <!--            <arg value="&#45;&#45;standard=PHPCS" />
+                <arg value="&#45;&#45;standard=Zend" />
+                <arg value="&#45;&#45;standard=PEAR" />
+                <arg value="&#45;&#45;standard=MySource" />
+                <arg value="&#45;&#45;standard=PSR1" />
+                <arg value="&#45;&#45;standard=Squiz" />-->
+                <arg value="--extensions=php" />
+                <arg value="--ignore=autoload.php" />
+                <arg path="${basedir}/src" />
+                <arg path="${basedir}/tests" />
+            </exec>
+
+            <property name="phpcs.done" value="true"/>
+        </target>
+
+        <!--find coding standard violations usind CodeSniffer (jenkins)-->
+
+        <target name="phpcs-ci"
+                unless="phpcs.done"
+                depends="prepare"
+                description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
+            <exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
+                <arg value="--report=checkstyle" />
+                <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+                <arg value="--standard=PSR2" />
+    <!--            <arg value="&#45;&#45;standard=PHPCS" />
+                <arg value="&#45;&#45;standard=Zend" />
+                <arg value="&#45;&#45;standard=PEAR" />
+                <arg value="&#45;&#45;standard=MySource" />
+                <arg value="&#45;&#45;standard=PSR1" />
+                <arg value="&#45;&#45;standard=Squiz" />-->
+                <arg value="--extensions=php" />
+                <arg value="--ignore=autoload.php" />
+                <arg path="${basedir}/src" />
+                <arg path="${basedir}/tests" />
+            </exec>
+
+            <property name="phpcs.done" value="true"/>
+        </target>
+
+        <!--find duplicate code (command line version)-->
+
+        <target name="phpcpd"
+                unless="phpcpd.done"
+                description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+            <exec executable="${phpcpd}" taskname="phpcpd">
+                <arg path="${basedir}/src" />
+            </exec>
+
+            <property name="phpcpd.done" value="true"/>
+        </target>
+
+        <!--find duplicate code (jenkins)-->
+
+        <target name="phpcpd-ci"
+                unless="phpcpd.done"
+                depends="prepare"
+                description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+            <exec executable="${phpcpd}" taskname="phpcpd">
+                <arg value="--log-pmd" />
+                <arg path="${basedir}/build/logs/pmd-cpd.xml" />
+                <arg path="${basedir}/src" />
+            </exec>
+
+            <property name="phpcpd.done" value="true"/>
+        </target>
+
+
+        <!--perform phpunit tests with coverage report-->
+
+        <target name="phpunit"
+                unless="phpunit.done"
+                depends="prepare"
+                description="Run unit tests with PHPUnit">
+            <exec executable="${phpunit}" resultproperty="result.phpunit" taskname="phpunit">
+                <arg value="--configuration"/>
+                <arg path="${basedir}/phpunit.xml"/>
+            </exec>
+
+            <property name="phpunit.done" value="true"/>
+        </target>
+
+        <!--perform phpunit tests without coverage report-->
+
+        <target name="phpunit-no-coverage"
+                unless="phpunit.done"
+                depends="prepare"
+                description="Run unit tests with PHPUnit (without generating code coverage reports)">
+            <exec executable="${phpunit}" failonerror="true" taskname="phpunit">
+                <arg value="--configuration"/>
+                <arg path="${basedir}/phpunit.xml"/>
+                <arg value="--no-coverage"/>
+            </exec>
+
+            <property name="phpunit.done" value="true"/>
+        </target>
+
+        <!--generate documentation-->
+
+        <target name="phpmetrics"
+                unless="phpmetrics.done"
+                description="generate phpmetrics reports">
+            <exec executable="${phpmetrics}" taskname="phpmetrics">
+                <arg value="--report-xml=${basedir}/build/logs/phpmetrics.xml"/>
+                <arg value="--violations-xml=${basedir}/build/logs/violations.xml"/>
+                <arg value="--report-html=${basedir}/build/logs/quality.html"/>
+                <arg path="${basedir}/src"/>
+            </exec>
+
+            <property name="phpmetrics.done" value="true"/>
+        </target>
+
+        <target name="phpdox"
+                unless="phpdox.done"
+                depends="phploc-ci,phpcs-ci,phpmd-ci"
+                description="Generate project documentation using phpDox">
+            <exec executable="${phpdox}" dir="${basedir}" taskname="phpdox"/>
+
+            <property name="phpdox.done" value="true"/>
+        </target>
+
+        <target name="-check-failure">
+            <fail message="PHPUnit did not finish successfully">
+                <condition>
+                    <not>
+                        <equals arg1="${result.phpunit}" arg2="0"/>
+                    </not>
+                </condition>
+            </fail>
+        </target>
+    </project>
+
+
+##Gradle Version
+
+    ext {
+    sourceDir = 'src'
+    testDir = 'tests'
+    reportDir = 'build/reports'
+    apiDir = 'build/reports/api'
+    }
+
+    task prepare(type: Delete) {
+        delete reportDir
+        delete apiDir
+        doLast {
+            file(reportDir).mkdirs()
+            file(apiDir).mkdirs()
+        }
+    }
+
+    def vendorBinDir = "/home/vagrant/.composer/vendor/bin"
+    def usrVendorBinDir = "/usr/bin"
+    def cmdTemplate = { cmd -> vendorBinDir + '/' + cmd}
+    def usrCmdTemplate = { cmd -> usrVendorBinDir + '/' + cmd}
+
+    task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
+        executable cmdTemplate(name)
+            args "--count-tests", "--log-csv", "./build/reports/phploc.csv", "--log-xml", "./build/reports/phploc.xml", sourceDir, testDir
+    }
+
+    task pdepend(type: Exec, description: 'Calculate software metrics using PHPDepend') {
+        executable cmdTemplate(name)
+            args "--summary-xml=./build/reports/jdepend-summary.xml", "--jdepend-xml=./build/reports/jdepend.xml", "--jdepend-chart=./build/reports/pdepend-dependencies.svg", "--overview-pyramid=./build/reports/pdepend-overview-pyramid.svg", sourceDir
+    }
+
+    task phpmd (type : Exec, description : "Perform project mess detection using PHPMD, and Creating a log file for the Continuous Integration Server"){
+        executable cmdTemplate(name)
+            args sourceDir, "xml", "./build/phpmd.xml", "--reportfile", "./build/reports/phpmd.xml"
+    }
+
+    task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
+        executable cmdTemplate(name)
+            args "--log-pmd", "build/reports/pmd-cpd.xml", sourceDir
+    }
+
+    task phpunit (type : Exec, description : "Run unit tests with PHPUnit"){
+        executable cmdTemplate(name)
+            args "-c", "build/phpunit.xml"
+    }
+
+    task phpcs (type : Exec, description : "Find Coding Standard Violations using PHP_CodeSniffer"){
+        executable usrCmdTemplate(name)
+            args "--report=checkstyle", "--report-file=./build/reports/checkstyle.xml", "--standard=PSR2", "--extensions=php", "--ignore=autoload.php", sourceDir, testDir
+    }
+
+    task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
+        executable usrCmdTemplate(name)
+            args "-f", "build/phpdox.xml"
+    }
+
+    task phpmetrics (type : Exec, description : "Geenrating PHPMetrics"){
+        executable cmdTemplate(name)
+            args "--report-xml=./build/reports/phpmetrics.xml", "--violations-xml=./build/reports/violations.xml", "--report-html=./build/reports/quality.html", sourceDir
+    }
+
+    task fullbuild (dependsOn: [prepare, phploc, pdepend, phpmd, phpcpd, phpunit, phpcs, phpdox, phpmetrics])
+    phploc.mustRunAfter prepare
+    pdepend.mustRunAfter prepare
+    phpmd.mustRunAfter prepare
+    phpcpd.mustRunAfter prepare
+    phpunit.mustRunAfter prepare
+    phpcs.mustRunAfter prepare
+    phpdox.mustRunAfter prepare
+    phpmetrics.mustRunAfter prepare    
         
         
 #Java
+
+##Ant Version
 
 ##download following .jar
 
@@ -1288,22 +1421,431 @@ also download Cobertura files and unpack to `lib/`
 
 [cobertura](http://sourceforge.net/projects/cobertura/files/latest/download?source=files)
 
-ISSUE!!!!
+##ISSUES
+cobertura:
+
 cobertura-report doesn't take multiple directories as input (such as `tests` and `src` in `folder`)
 
-jdepend
-BUILD FAILED
-/var/lib/jenkins/workspace/Java/javaTests/build.xml:263: Problem: failed to create task or type jdepend
-Cause: Could not load a dependent class jdepend/xmlui/JDepend
-       It is not enough to have Ant's optional JARs
-       you need the JAR files that the optional tasks depend upon.
-       Ant's optional task dependencies are listed in the manual.
-Action: Determine what extra JAR files are needed, and place them in one of:
-        -/var/lib/jenkins/tools/hudson.tasks.Ant_AntInstallation/Ant/lib
-        -/var/lib/jenkins/.ant/lib
-        -a directory added on the command line with the -lib argument
+jdepend:
 
-Do not panic, this is a common problem.
-The commonest cause is a missing JAR.
+    BUILD FAILED
+    /var/lib/jenkins/workspace/Java/javaTests/build.xml:263: Problem: failed to create task or type jdepend
+    Cause: Could not load a dependent class jdepend/xmlui/JDepend
+           It is not enough to have Ant's optional JARs
+           you need the JAR files that the optional tasks depend upon.
+           Ant's optional task dependencies are listed in the manual.
+    Action: Determine what extra JAR files are needed, and place them in one of:
+            -/var/lib/jenkins/tools/hudson.tasks.Ant_AntInstallation/Ant/lib
+            -/var/lib/jenkins/.ant/lib
+            -a directory added on the command line with the -lib argument
 
-This is not a bug; it is a configuration problem
+    Do not panic, this is a common problem.
+    The commonest cause is a missing JAR.
+
+    This is not a bug; it is a configuration problem
+
+This is why i replaced jdepend with `javancss`  
+
+### full `build.xml`
+
+    <project name="name-of-project" default="full-build" basedir=".">
+
+        <!--all properties-->
+        <property name="src.dir" value="folder/src"/>
+        <property name="tests.dir" value="folder/tests"/>
+        <property name="build.dir" value="build"/>
+        <property name="classes.dir" value="${build.dir}/classes"/>
+        <property name="jar.dir" value="${build.dir}/jar"/>
+        <property name="lib.dir" value="lib"/>
+        <property name="logs.dir" value="logs"/>
+        <property name="docs.dir" value="docs"/>
+        <property name="findbugs.dir" value="${lib.dir}/findbugs"/>
+        <property name="pmd.dir" value="${lib.dir}/pmd"/>
+        <!-- ===================== -->
+
+        <property name="checkstyle.jar.file" value="lib/checkstyle-6.12.1-all.jar"/>
+        <property name="javancss.dir" value="lib/javancss-32.53"/>
+
+        <!-- cobertura properties -->
+        <property name="cobertura.datafile" value="${build.dir}/cobertura.ser" />
+        <property name="cobertura.jar.dir" value="${lib.dir}/cobertura-2.0.3" />
+        <property name="cobertura.jar.file" value="${lib.dir}/cobertura-2.0.3/cobertura-2.0.3.jar" />
+        <property name="cobertura.dir" value="cobertura"/>
+        <property name="cob.instrumented.dir" value="${cobertura.dir}/instrumented" />
+        <!-- ===================== -->
+
+        <!--classpath to libraries like junit, cobertura etc.-->
+        <path id="classpath.lib">
+            <pathelement location="${classes.dir}" />
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+        <!-- ===================== -->
+
+        <!--junit tests including cobertura reports-->
+        <path id="cobertura.lib">
+            <fileset dir="${cobertura.jar.dir}">
+                <include name="cobertura-2.0.3.jar"/>
+                <include name="lib/**/*.jar"/>
+            </fileset>
+        </path>
+        <!-- ===================== -->
+
+        <!--run full build consisting of following targets-->
+        <target name="full-build"
+                depends="prepare, coverage-report, javadoc, checkstyle, jar, findbugs, pmd, javancss"
+                description="test build for java applications">
+        </target>
+        <!-- ===================== -->
+
+        <!--remove files & directories of previous builds-->
+        <target name="clean"
+                unless="clean.done"
+                description="Cleanup build artifacts">
+            <echo>=== CLEAN-UP OF BUILD ARTIFACTS FROM PREVIOUS BUILDS ===</echo>
+            <delete dir="${build.dir}"/>
+            <delete dir="${classes.dir}"/>
+            <delete dir="${logs.dir}"/>
+            <delete dir="${docs.dir}"/>
+
+            <delete dir="${cobertura.dir}" />
+            <delete dir="${cob.instrumented.dir}" />
+            <delete dir="${logs.dir}/cobertura" />
+            <delete dir="${logs.dir}/cobertura-xml" />
+            <delete dir="${logs.dir}/cobertura-summary-xml" />
+            <delete dir="${logs.dir}/cobertura-html" />
+            <delete file="cobertura.ser"/>
+
+            <property name="clean.done" value="true"/>
+        </target>
+        <!-- ===================== -->
+
+        <!--create directories for logs, coverage etc.-->
+        <target name="prepare"
+                unless="prepare.done"
+                depends="clean"
+                description="Prepare for build">
+            <echo>=== PREPARATION OF FOLDER-STRUCTURE ===</echo>
+            <mkdir dir="${build.dir}"/>
+            <mkdir dir="${classes.dir}"/>
+            <mkdir dir="${logs.dir}"/>
+            <mkdir dir="${docs.dir}"/>
+            <mkdir dir="${jar.dir}"/>
+
+            <mkdir dir="${cobertura.dir}" />
+            <mkdir dir="${cob.instrumented.dir}" />
+            <mkdir dir="${logs.dir}/cobertura" />
+
+            <property name="prepare.done" value="true"/>
+        </target>
+        <!-- ===================== -->
+
+        <!--compile sources and tests-->
+        <target name="compile"
+                depends="prepare">
+            <echo>=== COMPILE ===</echo>
+            <echo>=== COMPILING ${src.dir} FILES ... ===</echo>
+            <javac debug="true" includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}">
+            </javac>
+            <echo>=== COMPILE ===</echo>
+            <echo>=== COMPILING ${tests.dir} FILES ... ===</echo>
+            <javac includeantruntime="false" srcdir="${tests.dir}" destdir="${classes.dir}">
+                <classpath>
+                    <pathelement location="${lib.dir}/junit-4.12.jar" />
+                    <pathelement location="${lib.dir}/hamcrest-core-1.3.jar" />
+                </classpath>
+            </javac>
+        </target>
+        <!-- ===================== -->
+
+        <target name="jar" depends="compile">
+            <jar destfile="${jar.dir}/test.jar" basedir="${classes.dir}"/>
+        </target>
+
+        <!--setting up cobertura task and instrument-->
+        <taskdef classpathref="cobertura.lib"
+                 resource="tasks.properties"/>
+
+        <target name="instrument" depends="compile">
+            <cobertura-instrument todir="${cob.instrumented.dir}" >
+                <fileset dir="${classes.dir}">
+                    <include name="**/*.class"/>
+                </fileset>
+            </cobertura-instrument>
+        </target>
+        <!-- ===================== -->
+
+        <!--performing cobertura coverage-test after junit test-->
+        <target name="coverage-test"
+                depends="instrument">
+
+            <junit dir="./" failureproperty="test.failure" printsummary="yes" fork="true">
+                <classpath location="${cobertura.jar.file}"/>
+                <classpath location="${cob.instrumented.dir}"/>
+                <classpath>
+                    <path refid="classpath.lib"/>
+                </classpath>
+                <formatter type="xml" />
+                <batchtest fork="yes" todir="${logs.dir}">
+                    <fileset dir="${cob.instrumented.dir}">
+                        <include name="**/*Test*"/>
+                    </fileset>
+                </batchtest>
+
+                <!-- cobertura-specific -->
+                <sysproperty key="net.sourceforge.cobertura.datafile" file="cobertura.ser" />
+                <classpath refid="cobertura.lib" />
+            </junit>
+        </target>
+        <!-- ===================== -->
+
+        <!--make html report of cobertura-->
+        <target name="coverage-report"
+                depends="coverage-test">
+            <echo>=== PERFORMING COVERAGE-REPORT ===</echo>
+            <cobertura-report format="html" srcdir="folder" destdir="${logs.dir}/cobertura">
+                <fileset dir="${src.dir}">
+                    <include name="**/*.java"/>
+                </fileset>
+                <fileset dir="${tests.dir}">
+                    <include name="**/*.java"/>
+                </fileset>
+            </cobertura-report>
+        </target>
+        <!-- ===================== -->
+
+        <!--javadoc-->
+        <target name="javadoc"
+                depends="compile"
+                description="generate javadoc">
+            <javadoc packagenames="MyUnit"
+                     sourcepath="${src.dir}"
+                     destdir="${docs.dir}"
+                     failonerror="false"
+                     use="true"
+                     author="true">
+                <doctitle><![CDATA[<h1>DiOmega Test</h1>]]></doctitle>
+                <bottom><![CDATA[<i>Copyright &#169; 2015 DiOmega. All Rights Reserved.</i>]]></bottom>
+                <fileset dir="${src.dir}">
+                    <include name="**/*.java"/>
+                </fileset>
+            </javadoc>
+        </target>
+        <!-- ===================== -->
+
+        <!--checkstyle-->
+        <target name="checkstyle"
+                depends="compile">
+            <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+                     classpath="${lib.dir}/checkstyle-6.12.1-all.jar"/>
+            <checkstyle config="${lib.dir}/checkstyle_styles/sun_checks.xml"
+                        failOnViolation="false">
+                <fileset dir="${src.dir}" includes="**/*.java"/>
+                <formatter type="xml" toFile="${logs.dir}/checkstyle_errors.xml"/>
+            </checkstyle>
+        </target>
+        <!-- ===================== -->
+
+        <!--findbugs-->
+        <path id="findbugs.classpath">
+            <pathelement location="${findbugs.dir}/lib/findbugs-ant.jar"/>
+            <pathelement location="${findbugs.dir}/lib/findbugs.jar"/>
+        </path>
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="findbugs.classpath" />
+        <target name="findbugs"
+                depends="jar">
+            <findbugs home="${findbugs.dir}"
+                      output="xml" outputFile="${logs.dir}/findbugs_report.xml">
+                <auxClasspath>
+                    <fileset file="${lib.dir}/junit-4.5.jar" />
+                </auxClasspath>
+                <sourcePath path="${src.dir}"/>
+                <fileset dir="${src.dir}">
+                    <include name="**/*.java"/>
+                </fileset>
+                <class location="${jar.dir}"/>
+            </findbugs>
+        </target>
+        <!-- ===================== -->
+
+
+        <!-- PMD -->
+        <path id="pmd.classpath">
+            <pathelement location="${build}" />
+            <fileset dir="${pmd.dir}/lib/">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+        <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"
+                 classpathref="pmd.classpath" />
+        <target name="pmd">
+
+            <pmd>
+                <formatter type="xml" toFile="${logs.dir}/pmd_report.xml" />
+                <fileset dir="${src.dir}">
+                    <include name="**/*.java" />
+                </fileset>
+                <ruleset>rulesets/java/basic.xml</ruleset>
+                <ruleset>rulesets/java/braces.xml</ruleset>
+                <ruleset>rulesets/java/comments.xml</ruleset>
+                <ruleset>rulesets/java/comments.xml</ruleset>
+                <ruleset>rulesets/java/empty.xml</ruleset>
+                <ruleset>rulesets/java/controversial.xml</ruleset>
+                <ruleset>rulesets/java/coupling.xml</ruleset>
+                <ruleset>rulesets/java/design.xml</ruleset>
+                <ruleset>rulesets/java/imports.xml</ruleset>
+                <ruleset>rulesets/java/logging-java.xml</ruleset>
+                <ruleset>rulesets/java/migrating.xml</ruleset>
+                <ruleset>rulesets/java/naming.xml</ruleset>
+                <ruleset>rulesets/java/optimizations.xml</ruleset>
+                <ruleset>rulesets/java/strings.xml</ruleset>
+                <ruleset>rulesets/java/sunsecure.xml</ruleset>
+                <ruleset>rulesets/java/unusedcode.xml</ruleset>
+                <ruleset>rulesets/java/unnecessary.xml</ruleset>
+            </pmd>
+        </target>
+        <!-- ===================== -->
+
+        <!--JavaNCSS-->
+        <target name="javancss" depends="compile">
+            <taskdef name="javancss"
+                     classname="javancss.JavancssAntTask">
+                <classpath>
+                    <fileset dir="${javancss.dir}/lib" includes="*.jar"/>
+                </classpath>
+            </taskdef>
+
+            <javancss srcdir="${src.dir}"
+                      generateReport="true"
+                      outputfile="${logs.dir}/javancss_metrics.xml"
+                      format="xml"/>
+        </target>
+        <!-- ===================== -->
+
+        <!--jdepend-->
+     <!--   <target name="jdepend">
+
+            <jdepend format="xml" outputfile="${logs.dir}/jdepend-report.xml">
+                <classpath>
+                    <pathelement location="${classes.dir}" />
+                    <pathelement location="${lib.dir}/jdepend-2.9.1.jar" />
+                </classpath>
+                <classpath location="${classes.dir}" />
+            </jdepend>
+
+            <style basedir="docs" destdir="docs"
+                   includes="jdepend-report.xml"
+                   style="${lib.dir}/jdepend.xsl" />
+
+        </target>-->
+        <!-- ===================== -->
+
+    </project>
+
+### full `build.gradle`
+    
+    /*
+    *
+    -   for gradle only the /lib/checkstyle_styles/ is needed
+    -   rest of lib folder is for ant version
+    *
+    */
+
+    plugins {
+      id "net.saliman.cobertura" version "2.2.8"
+    }
+
+    println '---PROJECTFOLDER---'
+    println project.projectDir
+
+    apply plugin: 'java'
+    apply plugin: 'findbugs'
+    apply plugin: 'pmd'
+    apply plugin: 'jdepend'
+    apply plugin: 'checkstyle'
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['folder/src']
+            }
+        }
+        test {
+            java {
+                srcDirs = ['folder/tests']
+            }
+        }
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+
+        /*
+        -   stevesaliman/gradle-cobertura-plugin
+        -   ClassNotFoundException on 2.2.7 but 2.2.6
+        -   https://github.com/stevesaliman/gradle-cobertura-plugin/issues/75
+        -   you need to add the following testRuntime´s
+        */
+        testRuntime 'org.slf4j:slf4j-nop:1.7.12' // for cobertura
+    }
+
+    cobertura {
+        coverageFormats = ['html', 'xml']
+        coverageReportDir = new File("$buildDir/reports/cobertura")
+    }
+
+    findbugs {
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("$buildDir/reports/findbugsReports")
+        effort = "max"
+        reportLevel = "high"
+    }
+
+    pmd {
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("$buildDir/reports/pmdReports")
+        ruleSets = [
+            'java-basic',
+            'java-braces',
+            'java-comments',
+            'java-empty',
+            'java-controversial',
+            'java-coupling',
+            'java-design',
+            'java-imports',
+            'java-logging-java',
+            'java-migrating',
+            'java-naming',
+            'java-optimizations',
+            'java-strings',
+            'java-sunsecure',
+            'java-unusedcode',
+            'java-unnecessary'
+            ]
+    }
+
+    jdepend {
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("$buildDir/reports/jdependReports")
+    }
+
+    checkstyle {
+        sourceSets = [sourceSets.main]
+        showViolations = false
+        reportsDir = file("$buildDir/reports/checkstyleReports")
+        configFile = file("${project.projectDir}/lib/checkstyle_styles/google_checks.xml")
+    }
+
+    task javaDocs(type: Javadoc) {
+      source = sourceSets.main.allJava
+    }
+
+
