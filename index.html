@@ -1,0 +1,2214 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jenkins-build-examples by SebastianHanke</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Jenkins-build-examples</h1>
+        <p>build examples of java and php projects with ant and gradle</p>
+        <p class="view"><a href="https://github.com/SebastianHanke/Jenkins-build-examples">View the Project on GitHub <small>SebastianHanke/Jenkins-build-examples</small></a></p>
+        <ul>
+          <li><a href="https://github.com/SebastianHanke/Jenkins-build-examples/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/SebastianHanke/Jenkins-build-examples/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/SebastianHanke/Jenkins-build-examples">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="jenkins" class="anchor" href="#jenkins" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jenkins</h1>
+
+<h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of contents</h2>
+
+
+
+<ul>
+<li>Installation auf Ubuntu 14.03.2 LTS (Codename: trusty64)
+
+<ul>
+<li>[Installation][installation]
+
+<ul>
+<li>prerequisites</li>
+<li>install Jenkins</li>
+<li>some usefull notes</li>
+<li>start configuration</li>
+<li>jenkins browser commands</li>
+<li>workaround for svn connection problems</li>
+<li>fixing timezone-differences</li>
+</ul>
+</li>
+<li>[JavaScript WebdriverIO-Testrunner with Mocha][javascript]
+
+<ul>
+<li>Plugins in Jenkins IDE required</li>
+<li>Packages to install globally on jenkins server</li>
+<li>fixing xunit bug in webdriverio (not fixed by: 2.Oktober 2015)</li>
+<li>configure jenkins IDE</li>
+<li>create build project</li>
+<li>Source-Code-Managment</li>
+<li>Post-Build-Aktionen</li>
+</ul>
+</li>
+<li>[Testing with Mocha(Chai), WebdriverIO and PhantomJS][phantomjs]
+
+<ul>
+<li>Jenkins configuration</li>
+<li>Configure Build</li>
+<li>the respective config file <code>wdio.conf.js</code>
+</li>
+<li>Testing with ES6 generators (will reduce the callback-hell... ;))</li>
+<li>the results will be published in <code>/tests/results/*.xml</code>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>[PHP][php]
+
+<ul>
+<li>[Ant Version][phpant]
+
+<ul>
+<li>install phpunit</li>
+<li>install Ant if not done by Jenkins</li>
+<li>otherwise go to Jenkins and configure Ant-Installation</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Plugins for php
+
+<ul>
+<li>[PHPunit][phpunit]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>configuration file (<code>/phpunit.xml</code>)</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>[PHP_CodeSniffer][phpcs]
+
+<ul>
+<li>installation on server</li>
+<li>check which coding standards are installed</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>configuration file (under <code>build/ruleset.xml</code>)</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>[PHP_loc - lines of code][phploc]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>[PHP_Depend][phpdepend]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>jenkins post-build job configuration</li>
+<li>integrate Jdependend SVG reports</li>
+</ul>
+</li>
+<li>[PHPMD - PHP Mess Detector][phpmd]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>configuration file (under <code>build/phpmd.xml</code>)</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>[PHPCPD - Copy-Paste-Detector][phpcpd]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>[PHP_dox][phpdox]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>configuration file (under <code>build/phpdox.xml</code>)</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>PHP_CodeBrowser (not in use!)</li>
+<li>[PHPMetrics][phpmetrics]
+
+<ul>
+<li>installation on server</li>
+<li>jenkins plugin to visualize</li>
+<li>ant target in <code>build.xml</code>
+</li>
+<li>jenkins post-build job configuration</li>
+</ul>
+</li>
+<li>[complete working solution <code>build.xml</code>][phpcompleteant]</li>
+<li>[Gradle Version][phpcompletegradle]</li>
+</ul>
+</li>
+<li>[Java][java]
+
+<ul>
+<li>[Ant Version][javaant]</li>
+<li>download following .jar</li>
+<li>ISSUES
+
+<ul>
+<li>[full <code>build.xml</code>][javacompleteant]</li>
+<li>[full <code>build.gradle</code>][javacompletegradle]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+<h1>
+<a id="installation-auf-ubuntu-14032-lts-codename-trusty64" class="anchor" href="#installation-auf-ubuntu-14032-lts-codename-trusty64" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation auf Ubuntu 14.03.2 LTS (Codename: trusty64)</h1>
+
+<h2>
+<a id="installationinstallation" class="anchor" href="#installationinstallation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation[installation]</h2>
+
+<h3>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>prerequisites</h3>
+
+<p>JDK and JRE </p>
+
+<pre><code>java -version
+java version "1.7.0_79"
+OpenJDK Runtime Environment (IcedTea 2.5.6) (7u79-2.5.6-0ubuntu1.14.04.1)
+OpenJDK 64-Bit Server VM (build 24.79-b02, mixed mode)
+</code></pre>
+
+<p>download from <a href="http://openjdk.java.net/install/">http://openjdk.java.net/install/</a></p>
+
+<pre><code>sudo apt-get install openjdk-7-jre
+sudo apt-get install openjdk-7-jdk
+</code></pre>
+
+<h3>
+<a id="install-jenkins" class="anchor" href="#install-jenkins" aria-hidden="true"><span class="octicon octicon-link"></span></a>install Jenkins</h3>
+
+<p>(<a href="https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu">see website</a>)  </p>
+
+<pre><code>wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ &gt; /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install jenkins
+</code></pre>
+
+<h3>
+<a id="some-usefull-notes" class="anchor" href="#some-usefull-notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>some usefull notes</h3>
+
+<p>Jenkins will be launched as a aemon up on start. See <code>etc/init.d/jenkins</code> for more details
+The 'jenkins' user is created to run this service
+<strong>Log files</strong> will be placed in <code>/var/log/jenkins/jenkins.log</code>. Check this if you need troubleshooting Jenkins
+<code>/etc/default/jenkins</code> will capture configuration parameters for the launch like e.g. <code>JENKINS_HOME</code></p>
+
+<h3>
+<a id="start-configuration" class="anchor" href="#start-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>start configuration</h3>
+
+<p>By default, Jenkins will listen to port <strong>8080</strong> (e.g. <a href="http://jenkins-test.local:8080">http://jenkins-test.local:8080</a>)
+Access this port with your browser to <strong>start the configuration</strong></p>
+
+<h3>
+<a id="jenkins-browser-commands" class="anchor" href="#jenkins-browser-commands" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins browser commands</h3>
+
+<pre><code>http://jenkins-installation:8080/restart
+
+http://jenkins-installation:8080/exit
+
+http://jenkins-installation:8080/systemInfo
+</code></pre>
+
+<h3>
+<a id="workaround-for-svn-connection-problems" class="anchor" href="#workaround-for-svn-connection-problems" aria-hidden="true"><span class="octicon octicon-link"></span></a>workaround for svn connection problems</h3>
+
+<pre><code>sudo nano /etc/init.d/jenkins
+</code></pre>
+
+<p>look for the following lines</p>
+
+<pre><code># --user in daemon doesn't prepare environment variables like HOME, USER, LOGNAME or USERNAME,
+# so we let su do so for us now
+$SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar $JENKINS_WAR $JENKINS_ARGS" || return 2
+</code></pre>
+
+<p>the following should be inserted by you: <code>-Djsse.enableSNIExtension=false</code> so you get:</p>
+
+<pre><code>$SU -l $JENKINS_USER --shell=/bin/bash -c "$DAEMON $DAEMON_ARGS -- $JAVA $JAVA_ARGS -jar -Djsse.enableSNIExtension=false $JENKINS_WAR $JENKINS_ARGS" || return 2
+</code></pre>
+
+<h3>
+<a id="fixing-timezone-differences" class="anchor" href="#fixing-timezone-differences" aria-hidden="true"><span class="octicon octicon-link"></span></a>fixing timezone-differences</h3>
+
+<pre><code>sudo nano /etc/default/jenkins
+</code></pre>
+
+<p>insert the following there:</p>
+
+<pre><code>JAVA_ARGS="-Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Berlin"
+</code></pre>
+
+<h2>
+<a id="javascript-webdriverio-testrunner-with-mochajavascript" class="anchor" href="#javascript-webdriverio-testrunner-with-mochajavascript" aria-hidden="true"><span class="octicon octicon-link"></span></a>JavaScript WebdriverIO-Testrunner with Mocha[javascript]</h2>
+
+<h3>
+<a id="plugins-in-jenkins-ide-required" class="anchor" href="#plugins-in-jenkins-ide-required" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugins in Jenkins IDE required</h3>
+
+<ul>
+<li>Email extension</li>
+<li>NodeJS</li>
+<li>JUnit</li>
+</ul>
+
+<h3>
+<a id="packages-to-install-globally-on-jenkins-server" class="anchor" href="#packages-to-install-globally-on-jenkins-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Packages to install globally on jenkins server</h3>
+
+<ul>
+<li>NodeJS</li>
+<li>
+<p>npm</p>
+
+<p>sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm</p>
+</li>
+</ul>
+
+<p>Unfortunately there is a conflict with another package from Ubuntu, therefor the NodeJS executable is named nodejs instead of node.
+Keep that in mind as you are running software, or change this with:</p>
+
+<pre><code>sudo ln -s "$(which nodejs)" /usr/bin/node
+</code></pre>
+
+<p>with npm installed install the following modules</p>
+
+<pre><code>sudo npm install selenium-standalone@latest -g
+sudo selenium-standalone install
+</code></pre>
+
+<p>to start the selenium-server on server startup create a symbolic link in <code>/etc/init.d</code> and configure it to run</p>
+
+<pre><code>sudo ln -s /usr/local/bin/selenium-standalone /etc/init.d/
+sudo update-rc.d selenium-standalone defaults
+</code></pre>
+
+<p>NOTE!!! This caused the following error in my vagrant:</p>
+
+<pre><code>==&gt; default: Mounting shared folders...
+    default: /vagrant =&gt; /Volumes/sebastian_TC/VM-Box-Versionen/Jenkins_Test
+    Failed to mount folders in Linux guest. This is usually because
+    the "vboxsf" file system is not available. Please verify that
+    the guest additions are properly installed in the guest and
+    can work properly. The command attempted was:
+
+    mount -t vboxsf -o uid=`id -u www-data`,gid=`getent group www-data | cut -d: -f3`,dmode=777,fmode=777 vagrant /vagrant
+    mount -t vboxsf -o uid=`id -u www-data`,gid=`id -g www-data`,dmode=777,fmode=777 vagrant /vagrant
+
+    The error output from the last command was:
+
+    stdin: is not a tty
+    /sbin/mount.vboxsf: mounting failed with the error: No such device
+</code></pre>
+
+<p>on next startup selenium-server will be up automatically</p>
+
+<pre><code>sudo npm install jasmine webdriverio wdio-jasmine-framework phantomjs -g
+</code></pre>
+
+<h3>
+<a id="fixing-xunit-bug-in-webdriverio-not-fixed-by-2oktober-2015" class="anchor" href="#fixing-xunit-bug-in-webdriverio-not-fixed-by-2oktober-2015" aria-hidden="true"><span class="octicon octicon-link"></span></a>fixing xunit bug in webdriverio (not fixed by: 2.Oktober 2015)</h3>
+
+<pre><code>sudo nano /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/Node-Default/lib/node_modules/webdriverio/lib/reporter/xunit.js
+</code></pre>
+
+<p>look for lines:</p>
+
+<pre><code>self.write(tag('testcase', {
+            name: test.title,
+            disabled: test.pending,
+            time: test.time / 1000,
+            id: test.id,
+            file: test.file,
+            status: Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
+</code></pre>
+
+<p>and insert <code>test.err &amp;&amp;</code> at status</p>
+
+<pre><code>self.write(tag('testcase', {
+            name: test.title,
+            disabled: test.pending,
+            time: test.time / 1000,
+            id: test.id,
+            file: test.file,
+            status: test.err &amp;&amp; Object.getOwnPropertyNames(test.err).length === 0 ? 'passed' : 'failed',
+</code></pre>
+
+<h3>
+<a id="configure-jenkins-ide" class="anchor" href="#configure-jenkins-ide" aria-hidden="true"><span class="octicon octicon-link"></span></a>configure jenkins IDE</h3>
+
+<p>configure jenkins -&gt; system configuration</p>
+
+<ol>
+<li><p>NodeJS installation
+Choose Installation <code>NodeJS 4.1.1</code>
+Global npm packages to install <code>webdriverio jasmine wdio-jasmine-framework phantomjs</code></p></li>
+<li><p>Jenkins Location
+Jenkins URL e.g. <a href="http://192.168.56.103:8080/">http://192.168.56.103:8080/</a>
+Email of systemadministrator </p></li>
+<li><p>Extended E-mail Notification
+SMTP server 
+Default Subject <code>$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!</code>
+Default Content <code>${JELLY_SCRIPT,template="html"}</code></p></li>
+</ol>
+
+<h3>
+<a id="create-build-project" class="anchor" href="#create-build-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>create build project</h3>
+
+<p>Enter name and choose "Free Style" project</p>
+
+<h3>
+<a id="source-code-managment" class="anchor" href="#source-code-managment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Source-Code-Managment</h3>
+
+<p>-&gt; Subversion
+    Repository URL 
+    Credentials 
+-&gt; Buildumgebung
+    Provide Node &amp; npm bin/folder to PATH ...check...
+    Installation ...choose the recently created...
+-&gt; Buildverfahren
+    Shell ausführen
+<del><code>npm install</code></del> (dunno need because we installed everything globally before)
+<del><code>selenium-standalone start &amp;</code></del> (selenium-server is already running at server-startup)
+      <code>wdio tests/resources/wdio.conf.js</code></p>
+
+<h3>
+<a id="post-build-aktionen" class="anchor" href="#post-build-aktionen" aria-hidden="true"><span class="octicon octicon-link"></span></a>Post-Build-Aktionen</h3>
+
+<p>-&gt; Veröffentliche JUNIT-Testergebnisse
+    Testberichte in XML-Format <code>**/tests/results/*.xml</code></p>
+
+<p>-&gt; Editable Email Notification
+    Project recipient List  <code>$DEFAULT_RECIPIENTS</code>
+    Project Reply-To List <code>$DEFAULT_REPLYTO</code>
+    Content Type <code>Default Content Type</code>
+    Default Subject <code>$DEFAULT_SUBJECT</code>
+    Default Content <code>$DEFAULT_CONTENT</code></p>
+
+<h2>
+<a id="testing-with-mochachai-webdriverio-and-phantomjsphantomjs" class="anchor" href="#testing-with-mochachai-webdriverio-and-phantomjsphantomjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing with Mocha(Chai), WebdriverIO and PhantomJS[phantomjs]</h2>
+
+<h3>
+<a id="jenkins-configuration" class="anchor" href="#jenkins-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jenkins configuration</h3>
+
+<p>NodeJS configuration</p>
+
+<p>NodeJS Version 4.1.1</p>
+
+<p>Global npm packages to install</p>
+
+<pre><code>webdriverio mocha chai wdio-mocha-framework phantomjs
+
+if you want to use Jasmine
+
+jasmine wdio-jasmine-framework 
+</code></pre>
+
+<p>Shell command (if selenium is no installed on server)</p>
+
+<pre><code>Selenium-standalone install
+
+sudo npm install selenium-standalone -g
+sudo selenium-standalone install
+</code></pre>
+
+<h3>
+<a id="configure-build" class="anchor" href="#configure-build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure Build</h3>
+
+<p>Folder structure of repository</p>
+
+<pre><code>    tests
+        resources
+            wdio.conf.js
+        scripts
+            webdriverio
+                diomega.spec.js
+</code></pre>
+
+<p>so the shell command should look like this:</p>
+
+<pre><code>    wdio tests/resources/wdio.conf.js
+</code></pre>
+
+<h3>
+<a id="the-respective-config-file-wdioconfjs" class="anchor" href="#the-respective-config-file-wdioconfjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>the respective config file <code>wdio.conf.js</code>
+</h3>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">exports</span>.config <span class="pl-k">=</span> {
+
+    host<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>192.168.56.103<span class="pl-pds">'</span></span>,
+    port<span class="pl-k">:</span> <span class="pl-c1">4444</span>,
+    path<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/wd/hub<span class="pl-pds">'</span></span>,
+
+    specs<span class="pl-k">:</span> [
+        <span class="pl-s"><span class="pl-pds">'</span>./tests/scripts/webdriverio/**/*.js<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>./tests/scripts/webdriverio/*.js<span class="pl-pds">'</span></span>
+    ],
+    exclude<span class="pl-k">:</span> [
+        <span class="pl-c">// 'path/to/excluded/files'</span>
+    ],
+    capabilities<span class="pl-k">:</span> [{
+        browserName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>phantomjs<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>phantomjs.binary.path<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/usr/local/bin/phantomjs<span class="pl-pds">'</span></span>
+    }],
+    logLevel<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>verbose<span class="pl-pds">'</span></span>,
+    coloredLogs<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+    screenshotPath<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>./errorShots/<span class="pl-pds">'</span></span>,
+    baseUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>http://the-internet.herokuapp.com<span class="pl-pds">'</span></span>,
+    waitforTimeout<span class="pl-k">:</span> <span class="pl-c1">20000</span>,
+    framework<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>mocha<span class="pl-pds">'</span></span>,
+    reporter<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>xunit<span class="pl-pds">'</span></span>,
+    reporterOptions<span class="pl-k">:</span> {
+        outputDir<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>./tests/results/<span class="pl-pds">'</span></span>
+    },
+    <span class="pl-c">//onPrepare: function() {</span>
+        <span class="pl-c">// do something</span>
+    <span class="pl-c">//},</span>
+    <span class="pl-en">before</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">done</span>) {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>before...lets get started<span class="pl-pds">'</span></span>);
+    },
+    <span class="pl-en">after</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">failures</span>, <span class="pl-smi">pid</span>) {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>after...stop everything<span class="pl-pds">'</span></span>);
+    },
+    <span class="pl-c">//onComplete: function() {</span>
+        <span class="pl-c">// do something</span>
+    <span class="pl-c">//}</span>
+};</pre></div>
+
+<h3>
+<a id="testing-with-es6-generators-will-reduce-the-callback-hell-" class="anchor" href="#testing-with-es6-generators-will-reduce-the-callback-hell-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing with ES6 generators (will reduce the callback-hell... ;))</h3>
+
+<p>The wdio test runner supports ES6 generators.
+The following code therefor works as intended (with <code>baseUrl: 'http://the-internet.herokuapp.com'</code> set in wdio.config.js</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-s"><span class="pl-pds">"</span>use strict<span class="pl-pds">"</span></span>
+<span class="pl-k">var</span> assert <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>assert<span class="pl-pds">'</span></span>);
+
+describe(<span class="pl-s"><span class="pl-pds">'</span>checkboxes<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>() {
+
+    it(<span class="pl-s"><span class="pl-pds">'</span>checkbox 2 should be enabled<span class="pl-pds">'</span></span>, <span class="pl-k">function*</span>() {
+        <span class="pl-k">yield</span> browser.url(<span class="pl-s"><span class="pl-pds">'</span>/checkboxes<span class="pl-pds">'</span></span>);
+        <span class="pl-k">yield</span> browser.isSelected(<span class="pl-s"><span class="pl-pds">'</span>#checkboxes input:last-Child<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span>(<span class="pl-smi">isSelected</span>) {
+            assert.equal(isSelected, <span class="pl-c1">true</span>);
+            <span class="pl-c">/*expect(isSelected).toBe(true);*/</span>
+        });
+    });
+
+    it(<span class="pl-s"><span class="pl-pds">'</span>checkbox 1 should be enabled after clicking on it<span class="pl-pds">'</span></span>, <span class="pl-k">function*</span>() {
+        <span class="pl-k">yield</span> browser.url(<span class="pl-s"><span class="pl-pds">'</span>/checkboxes<span class="pl-pds">'</span></span>);
+        <span class="pl-k">yield</span> browser.isSelected(<span class="pl-s"><span class="pl-pds">'</span>#checkboxes input:first-Child<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span>(<span class="pl-smi">isSelected</span>) {
+            assert.equal(isSelected, <span class="pl-c1">false</span>);
+        });
+        <span class="pl-k">yield</span> browser.<span class="pl-c1">click</span>(<span class="pl-s"><span class="pl-pds">'</span>#checkboxes input:first-Child<span class="pl-pds">'</span></span>);
+        <span class="pl-k">yield</span> browser.isSelected(<span class="pl-s"><span class="pl-pds">'</span>#checkboxes input:first-Child<span class="pl-pds">'</span></span>).then(<span class="pl-k">function</span>(<span class="pl-smi">isSelected</span>) {
+            assert.equal(isSelected, <span class="pl-c1">true</span>);
+        });
+    });
+
+});
+</pre></div>
+
+<h3>
+<a id="the-results-will-be-published-in-testsresultsxml" class="anchor" href="#the-results-will-be-published-in-testsresultsxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>the results will be published in <code>/tests/results/*.xml</code>
+</h3>
+
+<p>see <code>wdio.conf.js</code>
+so post-build-actions will be</p>
+
+<p>publish JUnit results</p>
+
+<p><code>**/tests/results/*.xml</code></p>
+
+<h4>
+<a id="problems-with-phantomjs" class="anchor" href="#problems-with-phantomjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>problems with phantomjs</h4>
+
+<p>if you try to e.g. .click() an element and the following error ocurrs
+ <code>Problem: Element is not currently visible and may not be manipulated</code>
+this is a webdriverIO bug, that meand that the element you tried to click is currently not visible in phantomjs, because of the default window size</p>
+
+<p>in this case try a higher window size before launching your tests
+e.g.:</p>
+
+<div class="highlight highlight-source-js"><pre>describe(<span class="pl-s"><span class="pl-pds">'</span>a click event<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>test....starts now....<span class="pl-pds">'</span></span>);
+    it(<span class="pl-s"><span class="pl-pds">'</span>should open a new page<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">done</span>) {
+        browser
+            .setViewportSize({
+                width<span class="pl-k">:</span> <span class="pl-c1">1024</span>,
+                height<span class="pl-k">:</span> <span class="pl-c1">768</span>
+            })
+            .windowHandleSize().then(<span class="pl-k">function</span>(<span class="pl-smi">size</span>) {
+                <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>...this is the size<span class="pl-pds">'</span></span>,size);
+            })
+            .<span class="pl-c1">click</span>(<span class="pl-s"><span class="pl-pds">'</span>.ac-gn-link-mac<span class="pl-pds">'</span></span>).pause(<span class="pl-c1">2000</span>).getTitle().then(<span class="pl-k">function</span> (<span class="pl-smi">title</span>) {
+                <span class="pl-en">console</span>.<span class="pl-c1">log</span>(title);
+                expect(title).toEqual(<span class="pl-s"><span class="pl-pds">'</span>Mac – Apple (DE)<span class="pl-pds">'</span></span>);
+                done();
+            });
+    })
+});</pre></div>
+
+<h1>
+<a id="phpphp" class="anchor" href="#phpphp" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP[php]</h1>
+
+<h2>
+<a id="ant-versionphpant" class="anchor" href="#ant-versionphpant" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ant Version[phpant]</h2>
+
+<h3>
+<a id="install-phpunit" class="anchor" href="#install-phpunit" aria-hidden="true"><span class="octicon octicon-link"></span></a>install phpunit</h3>
+
+<h3>
+<a id="install-ant-if-not-done-by-jenkins" class="anchor" href="#install-ant-if-not-done-by-jenkins" aria-hidden="true"><span class="octicon octicon-link"></span></a>install Ant if not done by Jenkins</h3>
+
+<pre><code>sudo apt-get install ant
+</code></pre>
+
+<h3>
+<a id="otherwise-go-to-jenkins-and-configure-ant-installation" class="anchor" href="#otherwise-go-to-jenkins-and-configure-ant-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>otherwise go to Jenkins and configure Ant-Installation</h3>
+
+<p>configure Jenkins -&gt; configure system -&gt; Ant -&gt; Ant installations -&gt; install automatically</p>
+
+<p>configure jenkins -&gt; configure plugins -&gt; install Ant plugin</p>
+
+<h4>
+<a id="editable-email-notifications" class="anchor" href="#editable-email-notifications" aria-hidden="true"><span class="octicon octicon-link"></span></a>editable email notifications</h4>
+
+<p>install plugin to send email notifications</p>
+
+<hr>
+
+<h1>
+<a id="plugins-for-php" class="anchor" href="#plugins-for-php" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugins for php</h1>
+
+<h2>
+<a id="phpunitphpunit" class="anchor" href="#phpunitphpunit" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHPunit[phpunit]</h2>
+
+<h3>
+<a id="installation-on-server" class="anchor" href="#installation-on-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<div class="highlight highlight-source-shell"><pre>
+    curl -sS https://getcomposer.org/installer <span class="pl-k">|</span> php
+
+    sudo mv composer.phar /usr/local/bin/composer
+
+    composer global require <span class="pl-s"><span class="pl-pds">"</span>phpunit/phpunit=5.0.*<span class="pl-pds">"</span></span>
+
+    //sudo nano <span class="pl-k">~</span>/.bashrc
+
+    //export PATH=<span class="pl-smi">$PATH</span>:<span class="pl-k">~</span>/.composer/vendor/bin/</pre></div>
+
+<h4>
+<a id="upgrade-php-to-56" class="anchor" href="#upgrade-php-to-56" aria-hidden="true"><span class="octicon octicon-link"></span></a>upgrade php to 5.6</h4>
+
+<div class="highlight highlight-source-shell"><pre>    sudo apt-get -y update
+
+    add-apt-repository ppa:ondrej/php5-5.6
+
+    sudo apt-get -y update
+
+    sudo apt-get -y install php5
+
+    php -v //to verify the version</pre></div>
+
+<h4>
+<a id="enable-php-code-coverage-like-clover" class="anchor" href="#enable-php-code-coverage-like-clover" aria-hidden="true"><span class="octicon octicon-link"></span></a>enable php-code-coverage like 'clover'</h4>
+
+<p>Clover provides the metrics you need to better balance the effort between writing code that does stuff, and code that tests stuff.</p>
+
+<p>if not, install xdebug for phpunit</p>
+
+<pre><code>sudo pecl install xdebug
+</code></pre>
+
+<p>and add this to php.ini</p>
+
+<pre><code>zend_extension=/usr/lib/php5/20121212/xdebug.so
+
+sudo service apache2 restart
+</code></pre>
+
+<p>if you encounter <strong>The Zend Engine API version 220131226 which is installed, is newer.</strong> then do:</p>
+
+<p>go to (<a href="http://xdebug.org/wizard.php">http://xdebug.org/wizard.php</a>)
+paste in <code>php -i</code> output and let it analyse this
+for me it produced these instructions</p>
+
+<p>Download</p>
+
+<pre><code>wget http://xdebug.org/files/xdebug-2.4.0beta1.tgz
+</code></pre>
+
+<p>Unpack the downloaded file with </p>
+
+<pre><code>tar -xvzf xdebug-2.4.0beta1.tgz
+</code></pre>
+
+<p>run:    </p>
+
+<pre><code>cd xdebug-2.4.0beta1
+phpize (See the FAQ if you don't have phpize.
+</code></pre>
+
+<p>As part of its output it should show:</p>
+
+<pre><code>Configuring for:
+...
+Zend Module Api No:      20131226
+Zend Extension Api No:   220131226
+</code></pre>
+
+<p>If it does not, you are using the wrong phpize. Please follow this FAQ entry and skip the next step.</p>
+
+<p>Run: </p>
+
+<pre><code>./configure
+make
+cp modules/xdebug.so /usr/lib/php5/20131226
+sudo nano /etc/php5/cli/php.ini
+</code></pre>
+
+<p>and add the line</p>
+
+<pre><code>zend_extension = /usr/lib/php5/20131226/xdebug.so
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize" class="anchor" href="#jenkins-plugin-to-visualize" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/display/JENKINS/xUnit+Plugin">XUnit</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml" class="anchor" href="#ant-target-in-buildxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>    <span class="pl-c">&lt;!--perform phpunit tests with coverage report--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Run unit tests with PHPUnit<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpunit}<span class="pl-pds">"</span></span> <span class="pl-e">resultproperty</span>=<span class="pl-s"><span class="pl-pds">"</span>result.phpunit<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--configuration<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpunit.xml<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;
+
+    <span class="pl-c">&lt;!--perform phpunit tests without coverage report--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit-no-coverage<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Run unit tests with PHPUnit (without generating code coverage reports)<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpunit}<span class="pl-pds">"</span></span> <span class="pl-e">failonerror</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--configuration<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpunit.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--no-coverage<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;</pre></div>
+
+<h3>
+<a id="configuration-file-phpunitxml" class="anchor" href="#configuration-file-phpunitxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>configuration file (<code>/phpunit.xml</code>)</h3>
+
+<div class="highlight highlight-text-xml"><pre>    &lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>?&gt;
+    &lt;<span class="pl-ent">phpunit</span>
+            <span class="pl-e">backupGlobals</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>
+            <span class="pl-e">backupStaticAttributes</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>
+            <span class="pl-e">strict</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>
+            <span class="pl-e">verbose</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">testsuites</span>&gt;
+            &lt;<span class="pl-ent">testsuite</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>ProjectName<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">directory</span> <span class="pl-e">suffix</span>=<span class="pl-s"><span class="pl-pds">"</span>Test.php<span class="pl-pds">"</span></span>&gt;tests/&lt;/<span class="pl-ent">directory</span>&gt;
+                &lt;<span class="pl-ent">directory</span> <span class="pl-e">suffix</span>=<span class="pl-s"><span class="pl-pds">"</span>Test.php<span class="pl-pds">"</span></span>&gt;tests/&lt;/<span class="pl-ent">directory</span>&gt;
+            &lt;/<span class="pl-ent">testsuite</span>&gt;
+        &lt;/<span class="pl-ent">testsuites</span>&gt;
+
+        &lt;<span class="pl-ent">logging</span>&gt;
+            &lt;<span class="pl-ent">log</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage-html<span class="pl-pds">"</span></span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">log</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage-clover<span class="pl-pds">"</span></span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>reports/clover.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">log</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage-crap4j<span class="pl-pds">"</span></span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>reports/crap4j.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">log</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>junit<span class="pl-pds">"</span></span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>reports/junit.xml<span class="pl-pds">"</span></span> <span class="pl-e">logIncompleteSkipped</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">logging</span>&gt;
+
+        &lt;<span class="pl-ent">filter</span>&gt;
+            &lt;<span class="pl-ent">whitelist</span> <span class="pl-e">addUncoveredFilesFromWhitelist</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">directory</span> <span class="pl-e">suffix</span>=<span class="pl-s"><span class="pl-pds">"</span>.php<span class="pl-pds">"</span></span>&gt;src&lt;/<span class="pl-ent">directory</span>&gt;
+                &lt;<span class="pl-ent">exclude</span>&gt;
+                    &lt;<span class="pl-ent">file</span>&gt;src/bootstrap.php&lt;/<span class="pl-ent">file</span>&gt;
+                &lt;/<span class="pl-ent">exclude</span>&gt;
+            &lt;/<span class="pl-ent">whitelist</span>&gt;
+        &lt;/<span class="pl-ent">filter</span>&gt;
+    &lt;/<span class="pl-ent">phpunit</span>&gt;</pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration" class="anchor" href="#jenkins-post-build-job-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Publish JUnit results: <code>**/logs/junit.xml</code>
+Publish Clover results:  <strong>Clover XML Location</strong> <code>build/clover.xml</code></p>
+
+<hr>
+
+<h2>
+<a id="php_codesnifferphpcs" class="anchor" href="#php_codesnifferphpcs" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP_CodeSniffer[phpcs]</h2>
+
+<h3>
+<a id="installation-on-server-1" class="anchor" href="#installation-on-server-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>sudo pear install PHP_CodeSniffer
+
+//command: phpcs
+</code></pre>
+
+<h3>
+<a id="check-which-coding-standards-are-installed" class="anchor" href="#check-which-coding-standards-are-installed" aria-hidden="true"><span class="octicon octicon-link"></span></a>check which coding standards are installed</h3>
+
+<pre><code>phpcs -i
+
+//The installed coding standards are Squiz, PSR2, PSR1, PHPCS, Zend, PEAR and MySource
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-1" class="anchor" href="#jenkins-plugin-to-visualize-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin">Checkstyle</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml-1" class="anchor" href="#ant-target-in-buildxml-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>    <span class="pl-c">&lt;!--find coding standard violations using CodeSniffer (command line version)--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcs}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--standard=PSR2<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=PHPCS<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=Zend<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=PEAR<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=MySource<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=PSR1<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=Squiz<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--extensions=php<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--ignore=autoload.php<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/tests<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;
+
+    <span class="pl-c">&lt;!--find coding standard violations usind CodeSniffer (jenkins)--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs-ci<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcs}<span class="pl-pds">"</span></span> <span class="pl-e">output</span>=<span class="pl-s"><span class="pl-pds">"</span>/dev/null<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report=checkstyle<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report-file=${basedir}/build/logs/checkstyle.xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--standard=PSR2<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=PHPCS<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=Zend<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=PEAR<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=MySource<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=PSR1<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">&amp;#45;&amp;#45;</span>standard=Squiz<span class="pl-pds">"</span></span> /&gt;--&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--extensions=php<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--ignore=autoload.php<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/tests<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;</pre></div>
+
+<h3>
+<a id="configuration-file-under-buildrulesetxml" class="anchor" href="#configuration-file-under-buildrulesetxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>configuration file (under <code>build/ruleset.xml</code>)</h3>
+
+<pre><code>    &lt;?xml version="1.0"?&gt;
+    &lt;ruleset name="name-of-your-coding-standard"&gt;
+        &lt;description&gt;Description of your coding standard&lt;/description&gt;
+
+        &lt;rule ref="Generic.PHP.DisallowShortOpenTag"/&gt;
+        &lt;!-- ... --&gt;
+    &lt;/ruleset&gt;
+</code></pre>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-1" class="anchor" href="#jenkins-post-build-job-configuration-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Checkstyle: <code>**/build/logs/checkstyle.xml</code></p>
+
+<hr>
+
+<h2>
+<a id="php_loc---lines-of-codephploc" class="anchor" href="#php_loc---lines-of-codephploc" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP_loc - lines of code[phploc]</h2>
+
+<h3>
+<a id="installation-on-server-2" class="anchor" href="#installation-on-server-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>composer global require 'phploc/phploc=*'
+
+//command: phploc
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-2" class="anchor" href="#jenkins-plugin-to-visualize-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin">Plot</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml-2" class="anchor" href="#ant-target-in-buildxml-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-source-shell"><pre>    <span class="pl-k">&lt;</span>target name=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span>
+            unless=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span>
+            description=<span class="pl-s"><span class="pl-pds">"</span>Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span><span class="pl-c1">exec</span> executable=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${phploc}</span><span class="pl-pds">"</span></span> taskname=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--count-tests<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/src<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/tests<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span>/exec<span class="pl-k">&gt;</span>
+
+        <span class="pl-k">&lt;</span>property name=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span> value=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>/target<span class="pl-k">&gt;</span>
+
+    <span class="pl-k">&lt;</span><span class="pl-k">!</span>--count lines of code (jenkins)--<span class="pl-k">&gt;</span>
+
+    <span class="pl-k">&lt;</span>target name=<span class="pl-s"><span class="pl-pds">"</span>phploc-ci<span class="pl-pds">"</span></span>
+            unless=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span>
+            depends=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            description=<span class="pl-s"><span class="pl-pds">"</span>Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span><span class="pl-c1">exec</span> executable=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${phploc}</span><span class="pl-pds">"</span></span> taskname=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--count-tests<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--log-csv<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/build/logs/phploc.csv<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--log-xml<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/build/logs/phploc.xml<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/src<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/tests<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span>/exec<span class="pl-k">&gt;</span>
+
+        <span class="pl-k">&lt;</span>property name=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span> value=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>/target<span class="pl-k">&gt;</span></pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-2" class="anchor" href="#jenkins-post-build-job-configuration-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Plot:</p>
+
+<p><strong>data series file</strong> <code>build/logs/phploc.csv</code></p>
+
+<p><strong>load data from csv</strong></p>
+
+<hr>
+
+<h2>
+<a id="php_dependphpdepend" class="anchor" href="#php_dependphpdepend" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP_Depend[phpdepend]</h2>
+
+<h3>
+<a id="installation-on-server-3" class="anchor" href="#installation-on-server-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>composer global require 'pdepend/pdepend=*'
+
+//command: pdepend
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-3" class="anchor" href="#jenkins-plugin-to-visualize-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/display/JENKINS/JDepend+Plugin">JDepend</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml-3" class="anchor" href="#ant-target-in-buildxml-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-source-shell"><pre>    <span class="pl-k">&lt;</span><span class="pl-k">!</span>--performs static code analysis on a given <span class="pl-c1">source</span> base, the sum of some statements or code fragments found <span class="pl-k">in</span> the analyzed <span class="pl-c1">source</span>--<span class="pl-k">&gt;</span>
+
+    <span class="pl-k">&lt;</span>target name=<span class="pl-s"><span class="pl-pds">"</span>pdepend<span class="pl-pds">"</span></span>
+            unless=<span class="pl-s"><span class="pl-pds">"</span>pdepend.done<span class="pl-pds">"</span></span>
+            depends=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            description=<span class="pl-s"><span class="pl-pds">"</span>Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span><span class="pl-c1">exec</span> executable=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${pdepend}</span><span class="pl-pds">"</span></span> taskname=<span class="pl-s"><span class="pl-pds">"</span>pdepend<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--summary-xml=<span class="pl-smi">${basedir}</span>/build/logs/jdepend.xml<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--jdepend-xml=<span class="pl-smi">${basedir}</span>/build/logs/jdepend.xml<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--jdepend-chart=<span class="pl-smi">${basedir}</span>/build/pdepend/dependencies.svg<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg value=<span class="pl-s"><span class="pl-pds">"</span>--overview-pyramid=<span class="pl-smi">${basedir}</span>/build/pdepend/overview-pyramid.svg<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+            <span class="pl-k">&lt;</span>arg path=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${basedir}</span>/src<span class="pl-pds">"</span></span> /<span class="pl-k">&gt;</span>
+        <span class="pl-k">&lt;</span>/exec<span class="pl-k">&gt;</span>
+
+        <span class="pl-k">&lt;</span>property name=<span class="pl-s"><span class="pl-pds">"</span>pdepend.done<span class="pl-pds">"</span></span> value=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>/target<span class="pl-k">&gt;</span></pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-3" class="anchor" href="#jenkins-post-build-job-configuration-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Report JDepend</p>
+
+<p><strong>Pre-generated JDepend File</strong>: <code>build/logs/jdepend.xml</code></p>
+
+<h3>
+<a id="integrate-jdependend-svg-reports" class="anchor" href="#integrate-jdependend-svg-reports" aria-hidden="true"><span class="octicon octicon-link"></span></a>integrate Jdependend SVG reports</h3>
+
+<p>in project description insert </p>
+
+<div class="highlight highlight-text-html-basic"><pre>    &lt;<span class="pl-ent">img</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>image/svg+xml<span class="pl-pds">"</span></span> <span class="pl-e">height</span>=<span class="pl-s"><span class="pl-pds">"</span>300<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>ws/build/pdepend/overview-pyramid.svg<span class="pl-pds">"</span></span> <span class="pl-e">width</span>=<span class="pl-s"><span class="pl-pds">"</span>500<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">img</span>&gt;
+    &lt;<span class="pl-ent">img</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>image/svg+xml<span class="pl-pds">"</span></span> <span class="pl-e">height</span>=<span class="pl-s"><span class="pl-pds">"</span>300<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>ws/build/pdepend/   dependencies.svg<span class="pl-pds">"</span></span> <span class="pl-e">width</span>=<span class="pl-s"><span class="pl-pds">"</span>500<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">img</span>&gt;</pre></div>
+
+<p>Jenkins is probably configured to text, therefor: </p>
+
+<p>configure jenkins -&gt; global security -&gt; change markup to html</p>
+
+<hr>
+
+<h2>
+<a id="phpmd---php-mess-detectorphpmd" class="anchor" href="#phpmd---php-mess-detectorphpmd" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHPMD - PHP Mess Detector[phpmd]</h2>
+
+<p><a href="http://phpmd.org/rules/cleancode.html">Clean Code Rules</a>
+<a href="http://phpmd.org/rules/codesize.html">Code Size Rules</a>
+<a href="http://phpmd.org/rules/controversial.html">Controversial Rules</a>
+<a href="http://phpmd.org/rules/design.html">Design Rules</a>
+<a href="http://phpmd.org/rules/naming.html">Naming Rules</a>
+<a href="http://phpmd.org/rules/unusedcode.html">Unused Code Rules</a></p>
+
+<h3>
+<a id="installation-on-server-4" class="anchor" href="#installation-on-server-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>composer global require 'phpmd/phpmd=*'
+
+//command: phpmd
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-4" class="anchor" href="#jenkins-plugin-to-visualize-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/display/JENKINS/PMD+Plugin">PMD</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml-4" class="anchor" href="#ant-target-in-buildxml-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>    <span class="pl-c">&lt;!--perform mess detection (command line version)--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpmd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpmd.xml<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;
+
+    <span class="pl-c">&lt;!--perform mess detection (jenkins)--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd-ci<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpmd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpmd.xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--reportfile<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs/pmd.xml<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;</pre></div>
+
+<h3>
+<a id="configuration-file-under-buildphpmdxml" class="anchor" href="#configuration-file-under-buildphpmdxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>configuration file (under <code>build/phpmd.xml</code>)</h3>
+
+<div class="highlight highlight-text-xml"><pre>    &lt;<span class="pl-ent">ruleset</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>names-of-your-coding-standard<span class="pl-pds">"</span></span>
+             <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span>http://pmd.sf.net/ruleset/1.0.0<span class="pl-pds">"</span></span>
+             <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">xsi</span>=<span class="pl-s"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="pl-pds">"</span></span>
+             <span class="pl-e">xsi</span><span class="pl-e">:</span><span class="pl-e">schemaLocation</span>=<span class="pl-s"><span class="pl-pds">"</span>http://pmd.sf.net/ruleset/1.0.0</span>
+<span class="pl-s">                          http://pmd.sf.net/ruleset_xml_schema.xsd<span class="pl-pds">"</span></span>
+             <span class="pl-e">xsi</span><span class="pl-e">:</span><span class="pl-e">noNamespaceSchemaLocation</span>=<span class="pl-s"><span class="pl-pds">"</span>http://pmd.sf.net/ruleset_xml_schema.xsd<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">description</span>&gt;Description of your coding standard&lt;/<span class="pl-ent">description</span>&gt;
+
+        <span class="pl-c">&lt;!--The Code Size Ruleset contains a collection of rules that find code size related problems.--&gt;</span>
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/CyclomaticComplexity<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/ExcessiveMethodLength<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/ExcessiveClassLength<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/ExcessiveParameterList<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/ExcessivePublicCount<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/TooManyFields<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/TooManyMethods<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/TooManyPublicMethods<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/codesize.xml/ExcessiveClassComplexity<span class="pl-pds">"</span></span> /&gt;
+
+        <span class="pl-c">&lt;!--The Unused Code Ruleset contains a collection of rules that find unused code.--&gt;</span>
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/unusedcode.xml/UnusedPrivateField<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/unusedcode.xml/UnusedLocalVariable<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/unusedcode.xml/UnusedPrivateMethod<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/unusedcode.xml/UnusedFormalParameter<span class="pl-pds">"</span></span> /&gt;
+
+        <span class="pl-c">&lt;!--The Clean Code ruleset contains rules that enforce a clean code base. This includes rules from SOLID and object calisthenics.--&gt;</span>
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/cleancode.xml/BooleanArgumentFlag<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/cleancode.xml/ElseExpression<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/cleancode.xml/StaticAccess<span class="pl-pds">"</span></span> /&gt;
+
+        <span class="pl-c">&lt;!--The Code Size Ruleset contains a collection of rules that find software design related problems.--&gt;</span>
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/design.xml/ExitExpression<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/design.xml/EvalExpression<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/design.xml/GotoStatement<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/design.xml/NumberOfChildren<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/design.xml/DepthOfInheritance<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/design.xml/CouplingBetweenObjects<span class="pl-pds">"</span></span> /&gt;
+
+        <span class="pl-c">&lt;!--The Naming Ruleset contains a collection of rules about names - too long, too short, and so forth.--&gt;</span>
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/naming.xml/ShortVariable<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/naming.xml/LongVariable<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/naming.xml/ShortMethodName<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/naming.xml/ConstructorWithNameAsEnclosingClass<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/naming.xml/ConstantNamingConventions<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/naming.xml/BooleanGetMethodName<span class="pl-pds">"</span></span> /&gt;
+
+        <span class="pl-c">&lt;!--This ruleset contains a collection of controversial rules.--&gt;</span>
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/controversial.xml/Superglobals<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/controversial.xml/CamelCaseClassName<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/controversial.xml/CamelCasePropertyName<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/controversial.xml/CamelCaseMethodName<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/controversial.xml/CamelCaseParameterName<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">rule</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>rulesets/controversial.xml/CamelCaseVariableName<span class="pl-pds">"</span></span> /&gt;
+
+    &lt;/<span class="pl-ent">ruleset</span>&gt;</pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-4" class="anchor" href="#jenkins-post-build-job-configuration-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Report PMD anylsis</p>
+
+<p><strong>filename PMD results</strong>: <code>build/logs/pmd.xml</code></p>
+
+<hr>
+
+<h2>
+<a id="phpcpd---copy-paste-detectorphpcpd" class="anchor" href="#phpcpd---copy-paste-detectorphpcpd" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHPCPD - Copy-Paste-Detector[phpcpd]</h2>
+
+<h3>
+<a id="installation-on-server-5" class="anchor" href="#installation-on-server-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>composer global require "sebastian/phpcpd=*"
+
+//command: phpcpd
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-5" class="anchor" href="#jenkins-plugin-to-visualize-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/x/X4IuAg">Duplicate Code Scanner Plug-in</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml-5" class="anchor" href="#ant-target-in-buildxml-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>    <span class="pl-c">&lt;!--find duplicate code (command line version)--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcpd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;
+
+    <span class="pl-c">&lt;!--find duplicate code (jenkins)--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd-ci<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcpd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--log-pmd<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs/pmd-cpd.xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;</pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-5" class="anchor" href="#jenkins-post-build-job-configuration-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Report Duplicate Code Scanner results</p>
+
+<p><strong>filename</strong>: <code>**/build/logs/pmd-cpd.xml</code></p>
+
+<hr>
+
+<h2>
+<a id="php_doxphpdox" class="anchor" href="#php_doxphpdox" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP_dox[phpdox]</h2>
+
+<h3>
+<a id="installation-on-server-6" class="anchor" href="#installation-on-server-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>wget https://github.com/theseer/phpdox/releases/download/0.8.0/phpdox-0.8.0.phar
+
+chmod +x phpdox-0.8.0.phar
+
+sudo mv phpdox-0.8.0.phar /usr/bin/phpdox
+
+//if not installed:
+sudo apt-get install php5-xsl
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-6" class="anchor" href="#jenkins-plugin-to-visualize-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<p><a href="http://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin">HTML publisher</a></p>
+
+<h3>
+<a id="ant-target-in-buildxml-6" class="anchor" href="#ant-target-in-buildxml-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc-ci,phpcs-ci,phpmd-ci<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Generate project documentation using phpDox<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpdox}<span class="pl-pds">"</span></span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox<span class="pl-pds">"</span></span>/&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;</pre></div>
+
+<h3>
+<a id="configuration-file-under-buildphpdoxxml" class="anchor" href="#configuration-file-under-buildphpdoxxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>configuration file (under <code>build/phpdox.xml</code>)</h3>
+
+<div class="highlight highlight-text-xml"><pre>    &lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span>?&gt;
+    &lt;<span class="pl-ent">phpdox</span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">'</span>http://xml.phpdox.net/config<span class="pl-pds">'</span></span>&gt;
+        &lt;<span class="pl-ent">project</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>name-of-project<span class="pl-pds">"</span></span> <span class="pl-e">source</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> <span class="pl-e">workdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpdox<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">collector</span> <span class="pl-e">publiconly</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">include</span> <span class="pl-e">mask</span>=<span class="pl-s"><span class="pl-pds">"</span>*.php<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">collector</span>&gt;
+
+            &lt;<span class="pl-ent">generator</span> <span class="pl-e">output</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/reports/api<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">enrich</span> <span class="pl-e">base</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/reports<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">source</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>build<span class="pl-pds">"</span></span> /&gt;
+                    &lt;<span class="pl-ent">source</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>checkstyle<span class="pl-pds">"</span></span> /&gt;
+                    &lt;<span class="pl-ent">source</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>pmd<span class="pl-pds">"</span></span> /&gt;
+                    &lt;<span class="pl-ent">source</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span> /&gt;
+                &lt;/<span class="pl-ent">enrich</span>&gt;
+                &lt;<span class="pl-ent">build</span> <span class="pl-e">engine</span>=<span class="pl-s"><span class="pl-pds">"</span>html<span class="pl-pds">"</span></span> <span class="pl-e">enabled</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">file</span> <span class="pl-e">extension</span>=<span class="pl-s"><span class="pl-pds">"</span>html<span class="pl-pds">"</span></span> /&gt;
+                &lt;/<span class="pl-ent">build</span>&gt;
+            &lt;/<span class="pl-ent">generator</span>&gt;
+        &lt;/<span class="pl-ent">project</span>&gt;
+    &lt;/<span class="pl-ent">phpdox</span>&gt;</pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-6" class="anchor" href="#jenkins-post-build-job-configuration-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<p>Publish HTML reports</p>
+
+<p><strong>directory</strong>: <code>build/api</code>
+<strong>index page</strong>: <code>index.html</code>
+<strong>report title</strong>: <code>HTML Report</code></p>
+
+<hr>
+
+<h2>
+<a id="php_codebrowser-not-in-use" class="anchor" href="#php_codebrowser-not-in-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP_CodeBrowser (not in use!)</h2>
+
+<pre><code>composer global require "mayflower/php-codebrowser=~1.1"
+
+//command: phpcb
+</code></pre>
+
+<hr>
+
+<h2>
+<a id="phpmetricsphpmetrics" class="anchor" href="#phpmetricsphpmetrics" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHPMetrics[phpmetrics]</h2>
+
+<h3>
+<a id="installation-on-server-7" class="anchor" href="#installation-on-server-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>installation on server</h3>
+
+<pre><code>composer global require "halleck45/phpmetrics"
+
+//command: phpmetrics
+</code></pre>
+
+<h3>
+<a id="jenkins-plugin-to-visualize-7" class="anchor" href="#jenkins-plugin-to-visualize-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins plugin to visualize</h3>
+
+<ul>
+<li>
+<p>for phpmetrics.xml option:
+<a href="http://wiki.jenkins-ci.org/display/JENKINS/Plot+Plugin">Plot</a></p>
+
+<p><strong>data series file</strong> <code>build/logs/phpmetrics.xml</code></p>
+
+<p><strong>load data from xml using xpath</strong>
+<strong>xpath result type</strong> number</p>
+</li>
+<li>
+<p>for violations.xml option:
+<a href="http://wiki.jenkins-ci.org/display/JENKINS/Violations">violation</a></p>
+
+<p>under pmd <code>build/logs/violations.xml</code></p>
+</li>
+<li><p>for phpmetrics.html option:
+<a href="http://wiki.jenkins-ci.org/display/JENKINS/Sidebar-Link+Plugin">sidebar-link</a></p></li>
+</ul>
+
+<h3>
+<a id="ant-target-in-buildxml-7" class="anchor" href="#ant-target-in-buildxml-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>ant target in <code>build.xml</code>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>    <span class="pl-c">&lt;!--generate documentation--&gt;</span>
+
+    &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics<span class="pl-pds">"</span></span>
+            <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics.done<span class="pl-pds">"</span></span>
+            <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>generate phpmetrics reports<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpmetrics}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report-xml=${basedir}/build/logs/phpmetrics.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--violations-xml=${basedir}/build/logs/violations.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report-html=${basedir}/build/logs/quality.html<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">exec</span>&gt;
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+    &lt;/<span class="pl-ent">target</span>&gt;</pre></div>
+
+<h3>
+<a id="jenkins-post-build-job-configuration-7" class="anchor" href="#jenkins-post-build-job-configuration-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>jenkins post-build job configuration</h3>
+
+<h6>
+<a id="for-phpmetricsxml-option" class="anchor" href="#for-phpmetricsxml-option" aria-hidden="true"><span class="octicon octicon-link"></span></a>for phpmetrics.xml option:</h6>
+
+<p>Plot</p>
+
+<p><strong>data series file</strong> <code>build/logs/phpmetrics.xml</code></p>
+
+<p><strong>load data from xml using xpath</strong>
+   <strong>xpath result type</strong> number</p>
+
+<h6>
+<a id="for-violationsxml-option" class="anchor" href="#for-violationsxml-option" aria-hidden="true"><span class="octicon octicon-link"></span></a>for violations.xml option:</h6>
+
+<p>Violation</p>
+
+<p>under pmd <code>build/logs/violations.xml</code></p>
+
+<h6>
+<a id="for-phpmetricshtml-option" class="anchor" href="#for-phpmetricshtml-option" aria-hidden="true"><span class="octicon octicon-link"></span></a>for phpmetrics.html option:</h6>
+
+<p>sidebar-links(right under description) 
+   <strong>link url</strong> <code>http://192.168.56.103:8080/job/PHPUnit/ws/build/logs/quality.html</code>
+   <strong>link text</strong> <code>PhpMetrics report</code>
+   <strong>link icon</strong> <code>document.gif</code></p>
+
+<p>to understand the results have a look at: (<a href="http://www.phpmetrics.org/documentation/how-to-read-report.html">how-to-read-report</a>)</p>
+
+<h2>
+<a id="complete-working-solution-buildxmlphpcompleteant" class="anchor" href="#complete-working-solution-buildxmlphpcompleteant" aria-hidden="true"><span class="octicon octicon-link"></span></a>complete working solution <code>build.xml</code>[phpcompleteant]</h2>
+
+<div class="highlight highlight-text-xml"><pre>    &lt;<span class="pl-ent">project</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>name-of-project<span class="pl-pds">"</span></span> <span class="pl-e">default</span>=<span class="pl-s"><span class="pl-pds">"</span>full-build<span class="pl-pds">"</span></span> <span class="pl-e">basedir</span>=<span class="pl-s"><span class="pl-pds">"</span>.<span class="pl-pds">"</span></span>&gt;
+
+        <span class="pl-c">&lt;!--location of executables--&gt;</span>
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>pdepend<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/home/vagrant/.composer/vendor/bin/pdepend<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/home/vagrant/.composer/vendor/bin/phpcpd<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/home/vagrant/.composer/vendor/bin/phploc<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/home/vagrant/.composer/vendor/bin/phpunit<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/home/vagrant/.composer/vendor/bin/phpmd<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/usr/bin/phpdox<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/usr/bin/phpcs<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>/home/vagrant/.composer/vendor/bin/phpmetrics<span class="pl-pds">"</span></span>/&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>full-build<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare, static-analysis, phpunit,phpdox,phpmetrics, -check-failure<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Performs static analysis, runs tests and generates project dpcumentation<span class="pl-pds">"</span></span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>full-build-parallel<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare,static-analysis-parallel,phpunit,phpdox,phpmetrics, -check-failure<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation<span class="pl-pds">"</span></span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>quick-build<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare, lint, phpunit-no-coverage<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Performs a lint check and runs tests without generating codce coverage reports<span class="pl-pds">"</span></span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>static-analysis<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>lint, phploc-ci, pdepend, phpmd-ci, phpcs-ci, phpcpd-ci<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Performs static analysis<span class="pl-pds">"</span></span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>static-analysis-parallel<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Performs static analysis (executing the tools in parallel)<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">parallel</span> <span class="pl-e">threadCount</span>=<span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">sequential</span>&gt;
+                    &lt;<span class="pl-ent">antcall</span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>pdepend<span class="pl-pds">"</span></span>/&gt;
+                    &lt;<span class="pl-ent">antcall</span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd-ci<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">sequential</span>&gt;
+                &lt;<span class="pl-ent">antcall</span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>lint<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">antcall</span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd-ci<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">antcall</span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs-ci<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">antcall</span> <span class="pl-e">target</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc-ci<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">parallel</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--remove directories of previous builds--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>clean<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>clean.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Cleanup build artifacts<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/api<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/coverage<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/pdepend<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/phpdox<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>clean.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--create directories for logs, coverage etc.--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>clean<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Prepare for build<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/api<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/coverage<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/pdepend<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/phpdox<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--perform syntax check of source-code with php -l--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>lint<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>lint.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Perform syntax check of sourcecode files<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">apply</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>php<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>lint<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>-l<span class="pl-pds">"</span></span> /&gt;
+
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/src<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.php<span class="pl-pds">"</span></span> /&gt;
+                    &lt;<span class="pl-ent">modified</span> /&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/tests<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.php<span class="pl-pds">"</span></span> /&gt;
+                    &lt;<span class="pl-ent">modified</span> /&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+            &lt;/<span class="pl-ent">apply</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>lint.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--count lines of code (command line usage)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phploc}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--count-tests<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/tests<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--count lines of code (jenkins)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc-ci<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phploc}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--count-tests<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--log-csv<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs/phploc.csv<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--log-xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs/phploc.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/tests<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--performs static code analysis on a given source base, the sum of some statements or code fragments found in the analyzed source--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>pdepend<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>pdepend.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${pdepend}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>pdepend<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--summary-xml=${basedir}/build/logs/jdepend.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--jdepend-xml=${basedir}/build/logs/jdepend.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--jdepend-chart=${basedir}/build/pdepend/dependencies.svg<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>pdepend.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--perform mess detection (command line version)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpmd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpmd.xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--perform mess detection (jenkins)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd-ci<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpmd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpmd.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--reportfile<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs/pmd.xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--find coding standard violations using CodeSniffer (command line version)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcs}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--standard=PSR2<span class="pl-pds">"</span></span> /&gt;
+    <span class="pl-c">&lt;!--            &lt;arg value="&amp;#45;&amp;#45;standard=PHPCS" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=Zend" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=PEAR" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=MySource" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=PSR1" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=Squiz" /&gt;--&gt;</span>
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--extensions=php<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--ignore=autoload.php<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/tests<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--find coding standard violations usind CodeSniffer (jenkins)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs-ci<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcs}<span class="pl-pds">"</span></span> <span class="pl-e">output</span>=<span class="pl-s"><span class="pl-pds">"</span>/dev/null<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report=checkstyle<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report-file=${basedir}/build/logs/checkstyle.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--standard=PSR2<span class="pl-pds">"</span></span> /&gt;
+    <span class="pl-c">&lt;!--            &lt;arg value="&amp;#45;&amp;#45;standard=PHPCS" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=Zend" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=PEAR" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=MySource" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=PSR1" /&gt;</span>
+<span class="pl-c">                &lt;arg value="&amp;#45;&amp;#45;standard=Squiz" /&gt;--&gt;</span>
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--extensions=php<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--ignore=autoload.php<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/tests<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcs.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--find duplicate code (command line version)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcpd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--find duplicate code (jenkins)--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd-ci<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpcpd}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--log-pmd<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/build/logs/pmd-cpd.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpcpd.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+
+        <span class="pl-c">&lt;!--perform phpunit tests with coverage report--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Run unit tests with PHPUnit<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpunit}<span class="pl-pds">"</span></span> <span class="pl-e">resultproperty</span>=<span class="pl-s"><span class="pl-pds">"</span>result.phpunit<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--configuration<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpunit.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--perform phpunit tests without coverage report--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit-no-coverage<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Run unit tests with PHPUnit (without generating code coverage reports)<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpunit}<span class="pl-pds">"</span></span> <span class="pl-e">failonerror</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--configuration<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/phpunit.xml<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--no-coverage<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpunit.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--generate documentation--&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>generate phpmetrics reports<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpmetrics}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report-xml=${basedir}/build/logs/phpmetrics.xml<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--violations-xml=${basedir}/build/logs/violations.xml<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>--report-html=${basedir}/build/logs/quality.html<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">arg</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}/src<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">exec</span>&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpmetrics.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>phploc-ci,phpcs-ci,phpmd-ci<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Generate project documentation using phpDox<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">exec</span> <span class="pl-e">executable</span>=<span class="pl-s"><span class="pl-pds">"</span>${phpdox}<span class="pl-pds">"</span></span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${basedir}<span class="pl-pds">"</span></span> <span class="pl-e">taskname</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox<span class="pl-pds">"</span></span>/&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>phpdox.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>-check-failure<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">fail</span> <span class="pl-e">message</span>=<span class="pl-s"><span class="pl-pds">"</span>PHPUnit did not finish successfully<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">condition</span>&gt;
+                    &lt;<span class="pl-ent">not</span>&gt;
+                        &lt;<span class="pl-ent">equals</span> <span class="pl-e">arg1</span>=<span class="pl-s"><span class="pl-pds">"</span>${result.phpunit}<span class="pl-pds">"</span></span> <span class="pl-e">arg2</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>/&gt;
+                    &lt;/<span class="pl-ent">not</span>&gt;
+                &lt;/<span class="pl-ent">condition</span>&gt;
+            &lt;/<span class="pl-ent">fail</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+    &lt;/<span class="pl-ent">project</span>&gt;</pre></div>
+
+<h2>
+<a id="gradle-versionphpcompletegradle" class="anchor" href="#gradle-versionphpcompletegradle" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gradle Version[phpcompletegradle]</h2>
+
+<pre lang="text"><code>    ext {
+    sourceDir = 'src'
+    testDir = 'tests'
+    reportDir = 'build/reports'
+    apiDir = 'build/reports/api'
+    }
+
+    task prepare(type: Delete) {
+        delete reportDir
+        delete apiDir
+        doLast {
+            file(reportDir).mkdirs()
+            file(apiDir).mkdirs()
+        }
+    }
+
+    def vendorBinDir = "/home/vagrant/.composer/vendor/bin"
+    def usrVendorBinDir = "/usr/bin"
+    def cmdTemplate = { cmd -&gt; vendorBinDir + '/' + cmd}
+    def usrCmdTemplate = { cmd -&gt; usrVendorBinDir + '/' + cmd}
+
+    task phploc(type: Exec, description: 'Measure project size using PHPLOC') {
+        executable cmdTemplate(name)
+            args "--count-tests", "--log-csv", "./build/reports/phploc.csv", "--log-xml", "./build/reports/phploc.xml", sourceDir, testDir
+    }
+
+    task pdepend(type: Exec, description: 'Calculate software metrics using PHPDepend') {
+        executable cmdTemplate(name)
+            args "--summary-xml=./build/reports/jdepend-summary.xml", "--jdepend-xml=./build/reports/jdepend.xml", "--jdepend-chart=./build/reports/pdepend-dependencies.svg", "--overview-pyramid=./build/reports/pdepend-overview-pyramid.svg", sourceDir
+    }
+
+    task phpmd (type : Exec, description : "Perform project mess detection using PHPMD, and Creating a log file for the Continuous Integration Server"){
+        executable cmdTemplate(name)
+            args sourceDir, "xml", "./build/phpmd.xml", "--reportfile", "./build/reports/phpmd.xml"
+    }
+
+    task phpcpd (type : Exec, description : "Find duplicate code using PHPCPD and log result in XML format."){
+        executable cmdTemplate(name)
+            args "--log-pmd", "build/reports/pmd-cpd.xml", sourceDir
+    }
+
+    task phpunit (type : Exec, description : "Run unit tests with PHPUnit"){
+        executable cmdTemplate(name)
+            args "-c", "build/phpunit.xml"
+    }
+
+    task phpcs (type : Exec, description : "Find Coding Standard Violations using PHP_CodeSniffer"){
+        executable usrCmdTemplate(name)
+            args "--report=checkstyle", "--report-file=./build/reports/checkstyle.xml", "--standard=PSR2", "--extensions=php", "--ignore=autoload.php", sourceDir, testDir
+    }
+
+    task phpdox (type : Exec, description : "Generating Docs enriched with pmd, checkstyle, phpcs,phpunit,phploc"){
+        executable usrCmdTemplate(name)
+            args "-f", "build/phpdox.xml"
+    }
+
+    task phpmetrics (type : Exec, description : "Geenrating PHPMetrics"){
+        executable cmdTemplate(name)
+            args "--report-xml=./build/reports/phpmetrics.xml", "--violations-xml=./build/reports/violations.xml", "--report-html=./build/reports/quality.html", sourceDir
+    }
+
+    task fullbuild (dependsOn: [prepare, phploc, pdepend, phpmd, phpcpd, phpunit, phpcs, phpdox, phpmetrics])
+    phploc.mustRunAfter prepare
+    pdepend.mustRunAfter prepare
+    phpmd.mustRunAfter prepare
+    phpcpd.mustRunAfter prepare
+    phpunit.mustRunAfter prepare
+    phpcs.mustRunAfter prepare
+    phpdox.mustRunAfter prepare
+    phpmetrics.mustRunAfter prepare    
+</code></pre>
+
+<h1>
+<a id="javajava" class="anchor" href="#javajava" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java[java]</h1>
+
+<h2>
+<a id="ant-versionjavaant" class="anchor" href="#ant-versionjavaant" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ant Version[javaant]</h2>
+
+<h2>
+<a id="download-following-jar" class="anchor" href="#download-following-jar" aria-hidden="true"><span class="octicon octicon-link"></span></a>download following .jar</h2>
+
+<p><a href="http://bit.ly/My9IXz">junit.jar</a>
+<a href="http://bit.ly/1gbl25b">hamcrest-core.jar</a></p>
+
+<p>and put them into <code>lib</code> directory</p>
+
+<p>also download Cobertura files and unpack to <code>lib/</code> </p>
+
+<p><a href="http://sourceforge.net/projects/cobertura/files/latest/download?source=files">cobertura</a></p>
+
+<h2>
+<a id="issues" class="anchor" href="#issues" aria-hidden="true"><span class="octicon octicon-link"></span></a>ISSUES</h2>
+
+<p>cobertura:</p>
+
+<p>cobertura-report doesn't take multiple directories as input (such as <code>tests</code> and <code>src</code> in <code>folder</code>)</p>
+
+<p>jdepend:</p>
+
+<pre><code>BUILD FAILED
+/var/lib/jenkins/workspace/Java/javaTests/build.xml:263: Problem: failed to create task or type jdepend
+Cause: Could not load a dependent class jdepend/xmlui/JDepend
+       It is not enough to have Ant's optional JARs
+       you need the JAR files that the optional tasks depend upon.
+       Ant's optional task dependencies are listed in the manual.
+Action: Determine what extra JAR files are needed, and place them in one of:
+        -/var/lib/jenkins/tools/hudson.tasks.Ant_AntInstallation/Ant/lib
+        -/var/lib/jenkins/.ant/lib
+        -a directory added on the command line with the -lib argument
+
+Do not panic, this is a common problem.
+The commonest cause is a missing JAR.
+
+This is not a bug; it is a configuration problem
+</code></pre>
+
+<p>This is why i replaced jdepend with <code>javancss</code>  </p>
+
+<h3>
+<a id="full-buildxmljavacompleteant" class="anchor" href="#full-buildxmljavacompleteant" aria-hidden="true"><span class="octicon octicon-link"></span></a>full <code>build.xml</code>[javacompleteant]</h3>
+
+<div class="highlight highlight-text-xml"><pre>    &lt;<span class="pl-ent">project</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>name-of-project<span class="pl-pds">"</span></span> <span class="pl-e">default</span>=<span class="pl-s"><span class="pl-pds">"</span>full-build<span class="pl-pds">"</span></span> <span class="pl-e">basedir</span>=<span class="pl-s"><span class="pl-pds">"</span>.<span class="pl-pds">"</span></span>&gt;
+
+        <span class="pl-c">&lt;!--all properties--&gt;</span>
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>src.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>folder/src<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>tests.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>folder/tests<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>build.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>build<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>classes.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${build.dir}/classes<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>jar.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${build.dir}/jar<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>lib.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>lib<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>logs.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>logs<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>docs.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>docs<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>findbugs.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/findbugs<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>pmd.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/pmd<span class="pl-pds">"</span></span>/&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>checkstyle.jar.file<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>lib/checkstyle-6.12.1-all.jar<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>javancss.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>lib/javancss-32.53<span class="pl-pds">"</span></span>/&gt;
+
+        <span class="pl-c">&lt;!-- cobertura properties --&gt;</span>
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.datafile<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${build.dir}/cobertura.ser<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.jar.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/cobertura-2.0.3<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.jar.file<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/cobertura-2.0.3/cobertura-2.0.3.jar<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>cob.instrumented.dir<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>${cobertura.dir}/instrumented<span class="pl-pds">"</span></span> /&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--classpath to libraries like junit, cobertura etc.--&gt;</span>
+        &lt;<span class="pl-ent">path</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>classpath.lib<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">pathelement</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.jar<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">fileset</span>&gt;
+        &lt;/<span class="pl-ent">path</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--junit tests including cobertura reports--&gt;</span>
+        &lt;<span class="pl-ent">path</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.lib<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cobertura.jar.dir}<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura-2.0.3.jar<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>lib/**/*.jar<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">fileset</span>&gt;
+        &lt;/<span class="pl-ent">path</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--run full build consisting of following targets--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>full-build<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare, coverage-report, javadoc, checkstyle, jar, findbugs, pmd, javancss<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>test build for java applications<span class="pl-pds">"</span></span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--remove files &amp; directories of previous builds--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>clean<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>clean.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Cleanup build artifacts<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== CLEAN-UP OF BUILD ARTIFACTS FROM PREVIOUS BUILDS ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${build.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${docs.dir}<span class="pl-pds">"</span></span>/&gt;
+
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cobertura.dir}<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cob.instrumented.dir}<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/cobertura<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/cobertura-xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/cobertura-summary-xml<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/cobertura-html<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">delete</span> <span class="pl-e">file</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.ser<span class="pl-pds">"</span></span>/&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>clean.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--create directories for logs, coverage etc.--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>
+                <span class="pl-e">unless</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare.done<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>clean<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>Prepare for build<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== PREPARATION OF FOLDER-STRUCTURE ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${build.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${docs.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${jar.dir}<span class="pl-pds">"</span></span>/&gt;
+
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cobertura.dir}<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cob.instrumented.dir}<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">mkdir</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/cobertura<span class="pl-pds">"</span></span> /&gt;
+
+            &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare.done<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--compile sources and tests--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>compile<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>prepare<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== COMPILE ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== COMPILING ${src.dir} FILES ... ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">javac</span> <span class="pl-e">debug</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">includeantruntime</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span> <span class="pl-e">srcdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span> <span class="pl-e">destdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span>&gt;
+            &lt;/<span class="pl-ent">javac</span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== COMPILE ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== COMPILING ${tests.dir} FILES ... ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">javac</span> <span class="pl-e">includeantruntime</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span> <span class="pl-e">srcdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${tests.dir}<span class="pl-pds">"</span></span> <span class="pl-e">destdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">classpath</span>&gt;
+                    &lt;<span class="pl-ent">pathelement</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/junit-4.12.jar<span class="pl-pds">"</span></span> /&gt;
+                    &lt;<span class="pl-ent">pathelement</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/hamcrest-core-1.3.jar<span class="pl-pds">"</span></span> /&gt;
+                &lt;/<span class="pl-ent">classpath</span>&gt;
+            &lt;/<span class="pl-ent">javac</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>jar<span class="pl-pds">"</span></span> <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>compile<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">jar</span> <span class="pl-e">destfile</span>=<span class="pl-s"><span class="pl-pds">"</span>${jar.dir}/test.jar<span class="pl-pds">"</span></span> <span class="pl-e">basedir</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+
+        <span class="pl-c">&lt;!--setting up cobertura task and instrument--&gt;</span>
+        &lt;<span class="pl-ent">taskdef</span> <span class="pl-e">classpathref</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.lib<span class="pl-pds">"</span></span>
+                 <span class="pl-e">resource</span>=<span class="pl-s"><span class="pl-pds">"</span>tasks.properties<span class="pl-pds">"</span></span>/&gt;
+
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>instrument<span class="pl-pds">"</span></span> <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>compile<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">cobertura-instrument</span> <span class="pl-e">todir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cob.instrumented.dir}<span class="pl-pds">"</span></span> &gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${classes.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.class<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+            &lt;/<span class="pl-ent">cobertura-instrument</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--performing cobertura coverage-test after junit test--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage-test<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>instrument<span class="pl-pds">"</span></span>&gt;
+
+            &lt;<span class="pl-ent">junit</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>./<span class="pl-pds">"</span></span> <span class="pl-e">failureproperty</span>=<span class="pl-s"><span class="pl-pds">"</span>test.failure<span class="pl-pds">"</span></span> <span class="pl-e">printsummary</span>=<span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span> <span class="pl-e">fork</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">classpath</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${cobertura.jar.file}<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">classpath</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${cob.instrumented.dir}<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">classpath</span>&gt;
+                    &lt;<span class="pl-ent">path</span> <span class="pl-e">refid</span>=<span class="pl-s"><span class="pl-pds">"</span>classpath.lib<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">classpath</span>&gt;
+                &lt;<span class="pl-ent">formatter</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">batchtest</span> <span class="pl-e">fork</span>=<span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span> <span class="pl-e">todir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${cob.instrumented.dir}<span class="pl-pds">"</span></span>&gt;
+                        &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*Test*<span class="pl-pds">"</span></span>/&gt;
+                    &lt;/<span class="pl-ent">fileset</span>&gt;
+                &lt;/<span class="pl-ent">batchtest</span>&gt;
+
+                <span class="pl-c">&lt;!-- cobertura-specific --&gt;</span>
+                &lt;<span class="pl-ent">sysproperty</span> <span class="pl-e">key</span>=<span class="pl-s"><span class="pl-pds">"</span>net.sourceforge.cobertura.datafile<span class="pl-pds">"</span></span> <span class="pl-e">file</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.ser<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">classpath</span> <span class="pl-e">refid</span>=<span class="pl-s"><span class="pl-pds">"</span>cobertura.lib<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">junit</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--make html report of cobertura--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage-report<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>coverage-test<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">echo</span>&gt;=== PERFORMING COVERAGE-REPORT ===&lt;/<span class="pl-ent">echo</span>&gt;
+            &lt;<span class="pl-ent">cobertura-report</span> <span class="pl-e">format</span>=<span class="pl-s"><span class="pl-pds">"</span>html<span class="pl-pds">"</span></span> <span class="pl-e">srcdir</span>=<span class="pl-s"><span class="pl-pds">"</span>folder<span class="pl-pds">"</span></span> <span class="pl-e">destdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/cobertura<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.java<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${tests.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.java<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+            &lt;/<span class="pl-ent">cobertura-report</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--javadoc--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>javadoc<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>compile<span class="pl-pds">"</span></span>
+                <span class="pl-e">description</span>=<span class="pl-s"><span class="pl-pds">"</span>generate javadoc<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">javadoc</span> <span class="pl-e">packagenames</span>=<span class="pl-s"><span class="pl-pds">"</span>MyUnit<span class="pl-pds">"</span></span>
+                     <span class="pl-e">sourcepath</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>
+                     <span class="pl-e">destdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${docs.dir}<span class="pl-pds">"</span></span>
+                     <span class="pl-e">failonerror</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>
+                     <span class="pl-e">use</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>
+                     <span class="pl-e">author</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">doctitle</span>&gt;<span class="pl-s"><span class="pl-pds">&lt;![CDATA[</span>&lt;h1&gt;DiOmega Test&lt;/h1&gt;<span class="pl-pds">]]&gt;</span></span>&lt;/<span class="pl-ent">doctitle</span>&gt;
+                &lt;<span class="pl-ent">bottom</span>&gt;<span class="pl-s"><span class="pl-pds">&lt;![CDATA[</span>&lt;i&gt;Copyright &amp;#169; 2015 DiOmega. All Rights Reserved.&lt;/i&gt;<span class="pl-pds">]]&gt;</span></span>&lt;/<span class="pl-ent">bottom</span>&gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.java<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+            &lt;/<span class="pl-ent">javadoc</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--checkstyle--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>checkstyle<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>compile<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">taskdef</span> <span class="pl-e">resource</span>=<span class="pl-s"><span class="pl-pds">"</span>com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties<span class="pl-pds">"</span></span>
+                     <span class="pl-e">classpath</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/checkstyle-6.12.1-all.jar<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">checkstyle</span> <span class="pl-e">config</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/checkstyle_styles/sun_checks.xml<span class="pl-pds">"</span></span>
+                        <span class="pl-e">failOnViolation</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span> <span class="pl-e">includes</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.java<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">formatter</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span> <span class="pl-e">toFile</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/checkstyle_errors.xml<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">checkstyle</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--findbugs--&gt;</span>
+        &lt;<span class="pl-ent">path</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>findbugs.classpath<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">pathelement</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${findbugs.dir}/lib/findbugs-ant.jar<span class="pl-pds">"</span></span>/&gt;
+            &lt;<span class="pl-ent">pathelement</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${findbugs.dir}/lib/findbugs.jar<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">path</span>&gt;
+        &lt;<span class="pl-ent">taskdef</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>findbugs<span class="pl-pds">"</span></span> <span class="pl-e">classname</span>=<span class="pl-s"><span class="pl-pds">"</span>edu.umd.cs.findbugs.anttask.FindBugsTask<span class="pl-pds">"</span></span> <span class="pl-e">classpathref</span>=<span class="pl-s"><span class="pl-pds">"</span>findbugs.classpath<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>findbugs<span class="pl-pds">"</span></span>
+                <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>jar<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">findbugs</span> <span class="pl-e">home</span>=<span class="pl-s"><span class="pl-pds">"</span>${findbugs.dir}<span class="pl-pds">"</span></span>
+                      <span class="pl-e">output</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span> <span class="pl-e">outputFile</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/findbugs_report.xml<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">auxClasspath</span>&gt;
+                    &lt;<span class="pl-ent">fileset</span> <span class="pl-e">file</span>=<span class="pl-s"><span class="pl-pds">"</span>${lib.dir}/junit-4.5.jar<span class="pl-pds">"</span></span> /&gt;
+                &lt;/<span class="pl-ent">auxClasspath</span>&gt;
+                &lt;<span class="pl-ent">sourcePath</span> <span class="pl-e">path</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.java<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+                &lt;<span class="pl-ent">class</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${jar.dir}<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">findbugs</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+
+        <span class="pl-c">&lt;!-- PMD --&gt;</span>
+        &lt;<span class="pl-ent">path</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>pmd.classpath<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">pathelement</span> <span class="pl-e">location</span>=<span class="pl-s"><span class="pl-pds">"</span>${build}<span class="pl-pds">"</span></span> /&gt;
+            &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${pmd.dir}/lib/<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>*.jar<span class="pl-pds">"</span></span> /&gt;
+            &lt;/<span class="pl-ent">fileset</span>&gt;
+        &lt;/<span class="pl-ent">path</span>&gt;
+        &lt;<span class="pl-ent">taskdef</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>pmd<span class="pl-pds">"</span></span> <span class="pl-e">classname</span>=<span class="pl-s"><span class="pl-pds">"</span>net.sourceforge.pmd.ant.PMDTask<span class="pl-pds">"</span></span>
+                 <span class="pl-e">classpathref</span>=<span class="pl-s"><span class="pl-pds">"</span>pmd.classpath<span class="pl-pds">"</span></span> /&gt;
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>pmd<span class="pl-pds">"</span></span>&gt;
+
+            &lt;<span class="pl-ent">pmd</span>&gt;
+                &lt;<span class="pl-ent">formatter</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span> <span class="pl-e">toFile</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/pmd_report.xml<span class="pl-pds">"</span></span> /&gt;
+                &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>&gt;
+                    &lt;<span class="pl-ent">include</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>**/*.java<span class="pl-pds">"</span></span> /&gt;
+                &lt;/<span class="pl-ent">fileset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/basic.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/braces.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/comments.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/comments.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/empty.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/controversial.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/coupling.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/design.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/imports.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/logging-java.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/migrating.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/naming.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/optimizations.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/strings.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/sunsecure.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/unusedcode.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+                &lt;<span class="pl-ent">ruleset</span>&gt;rulesets/java/unnecessary.xml&lt;/<span class="pl-ent">ruleset</span>&gt;
+            &lt;/<span class="pl-ent">pmd</span>&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--JavaNCSS--&gt;</span>
+        &lt;<span class="pl-ent">target</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>javancss<span class="pl-pds">"</span></span> <span class="pl-e">depends</span>=<span class="pl-s"><span class="pl-pds">"</span>compile<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">taskdef</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>javancss<span class="pl-pds">"</span></span>
+                     <span class="pl-e">classname</span>=<span class="pl-s"><span class="pl-pds">"</span>javancss.JavancssAntTask<span class="pl-pds">"</span></span>&gt;
+                &lt;<span class="pl-ent">classpath</span>&gt;
+                    &lt;<span class="pl-ent">fileset</span> <span class="pl-e">dir</span>=<span class="pl-s"><span class="pl-pds">"</span>${javancss.dir}/lib<span class="pl-pds">"</span></span> <span class="pl-e">includes</span>=<span class="pl-s"><span class="pl-pds">"</span>*.jar<span class="pl-pds">"</span></span>/&gt;
+                &lt;/<span class="pl-ent">classpath</span>&gt;
+            &lt;/<span class="pl-ent">taskdef</span>&gt;
+
+            &lt;<span class="pl-ent">javancss</span> <span class="pl-e">srcdir</span>=<span class="pl-s"><span class="pl-pds">"</span>${src.dir}<span class="pl-pds">"</span></span>
+                      <span class="pl-e">generateReport</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>
+                      <span class="pl-e">outputfile</span>=<span class="pl-s"><span class="pl-pds">"</span>${logs.dir}/javancss_metrics.xml<span class="pl-pds">"</span></span>
+                      <span class="pl-e">format</span>=<span class="pl-s"><span class="pl-pds">"</span>xml<span class="pl-pds">"</span></span>/&gt;
+        &lt;/<span class="pl-ent">target</span>&gt;
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+        <span class="pl-c">&lt;!--jdepend--&gt;</span>
+     <span class="pl-c">&lt;!--   &lt;target name="jdepend"&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">            &lt;jdepend format="xml" outputfile="${logs.dir}/jdepend-report.xml"&gt;</span>
+<span class="pl-c">                &lt;classpath&gt;</span>
+<span class="pl-c">                    &lt;pathelement location="${classes.dir}" /&gt;</span>
+<span class="pl-c">                    &lt;pathelement location="${lib.dir}/jdepend-2.9.1.jar" /&gt;</span>
+<span class="pl-c">                &lt;/classpath&gt;</span>
+<span class="pl-c">                &lt;classpath location="${classes.dir}" /&gt;</span>
+<span class="pl-c">            &lt;/jdepend&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">            &lt;style basedir="docs" destdir="docs"</span>
+<span class="pl-c">                   includes="jdepend-report.xml"</span>
+<span class="pl-c">                   style="${lib.dir}/jdepend.xsl" /&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">        &lt;/target&gt;--&gt;</span>
+        <span class="pl-c">&lt;!-- ===================== --&gt;</span>
+
+    &lt;/<span class="pl-ent">project</span>&gt;</pre></div>
+
+<h3>
+<a id="full-buildgradlejavacompletegradle" class="anchor" href="#full-buildgradlejavacompletegradle" aria-hidden="true"><span class="octicon octicon-link"></span></a>full <code>build.gradle</code>[javacompletegradle]</h3>
+
+<pre lang="text"><code>    /*
+    *
+    -   for gradle only the /lib/checkstyle_styles/ is needed
+    -   rest of lib folder is for ant version
+    *
+    */
+
+    plugins {
+      id "net.saliman.cobertura" version "2.2.8"
+    }
+
+    println '---PROJECTFOLDER---'
+    println project.projectDir
+
+    apply plugin: 'java'
+    apply plugin: 'findbugs'
+    apply plugin: 'pmd'
+    apply plugin: 'jdepend'
+    apply plugin: 'checkstyle'
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['folder/src']
+            }
+        }
+        test {
+            java {
+                srcDirs = ['folder/tests']
+            }
+        }
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+
+        /*
+        -   stevesaliman/gradle-cobertura-plugin
+        -   ClassNotFoundException on 2.2.7 but 2.2.6
+        -   https://github.com/stevesaliman/gradle-cobertura-plugin/issues/75
+        -   you need to add the following testRuntime´s
+        */
+        testRuntime 'org.slf4j:slf4j-nop:1.7.12' // for cobertura
+    }
+
+    cobertura {
+        coverageFormats = ['html', 'xml']
+        coverageReportDir = new File("$buildDir/reports/cobertura")
+    }
+
+    findbugs {
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("$buildDir/reports/findbugsReports")
+        effort = "max"
+        reportLevel = "high"
+    }
+
+    pmd {
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("$buildDir/reports/pmdReports")
+        ruleSets = [
+            'java-basic',
+            'java-braces',
+            'java-comments',
+            'java-empty',
+            'java-controversial',
+            'java-coupling',
+            'java-design',
+            'java-imports',
+            'java-logging-java',
+            'java-migrating',
+            'java-naming',
+            'java-optimizations',
+            'java-strings',
+            'java-sunsecure',
+            'java-unusedcode',
+            'java-unnecessary'
+            ]
+    }
+
+    jdepend {
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("$buildDir/reports/jdependReports")
+    }
+
+    checkstyle {
+        sourceSets = [sourceSets.main]
+        showViolations = false
+        reportsDir = file("$buildDir/reports/checkstyleReports")
+        configFile = file("${project.projectDir}/lib/checkstyle_styles/google_checks.xml")
+    }
+
+    task javaDocs(type: Javadoc) {
+      source = sourceSets.main.allJava
+    }
+</code></pre>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/SebastianHanke">SebastianHanke</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
