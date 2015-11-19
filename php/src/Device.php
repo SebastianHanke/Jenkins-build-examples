@@ -47,7 +47,7 @@ class Device extends AbstractDevice
      */
     public function scopes()
     {
-        O2F::gvTrace(func_get_args(), "FunctionCall", __METHOD__, "arguments");
+        FW::gvTrace(func_get_args(), "FunctionCall", __METHOD__, "arguments");
         return array(
 
             // Device ID
@@ -68,7 +68,7 @@ class Device extends AbstractDevice
      * @return $this
      */
     public function scopeApp($lAppId) {
-        O2F::gvTrace(func_get_args(),'FunctionCall',__METHOD__);
+        FW::gvTrace(func_get_args(),'FunctionCall',__METHOD__);
 
         $this->getDbCriteria()->mergeWith(array(
             'condition' => 't.appID=:appID',
@@ -87,7 +87,7 @@ class Device extends AbstractDevice
      * @return $this
      */
     public function scopeDeviceToken($sDeviceToken) {
-        O2F::gvTrace(func_get_args(),'FunctionCall',__METHOD__);
+        FW::gvTrace(func_get_args(),'FunctionCall',__METHOD__);
 
         $this->getDbCriteria()->mergeWith(array(
             'condition' => 't.deviceToken=:deviceToken',
@@ -183,7 +183,7 @@ class Device extends AbstractDevice
      * @return Array Ergebnismeldung der Speicherung
      */
     public static function gaRegisterToken($sToken, $lAppID) {
-        O2F::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
+        FW::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
 
         try {
             $oDevice = self::moInsertOrUpdateDevice($sToken, $lAppID);
@@ -193,14 +193,14 @@ class Device extends AbstractDevice
             if (empty($aErrors)) {
                 return array('Success' => true);
             } else {
-                $aReturn = ErrorCode::gaGetErrorData(O2F_SAVE_FAILED);
+                $aReturn = ErrorCode::gaGetErrorData(FW_SAVE_FAILED);
                 $aReturn['saveErrors'] = $aErrors;
                 return $aReturn;
             }
 
         } catch(Exception $e) {
-            O2F::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
-            return ErrorCode::gaGetErrorData(O2F_ERROR_UNKNOWN);
+            FW::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
+            return ErrorCode::gaGetErrorData(FW_ERROR_UNKNOWN);
         }
     }
 
@@ -219,7 +219,7 @@ class Device extends AbstractDevice
      * @return mixed Die ID der Gruppe oder null im Fehlerfall
      */
     public static function glGetDeviceID($sToken, $lAppID) {
-        O2F::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
+        FW::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
 
         $lDeviceID = null;
 
@@ -229,8 +229,8 @@ class Device extends AbstractDevice
                 $lDeviceID = $oDevice->deviceID;
             }
         } catch(Exception $e) {
-            O2F::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
-            return ErrorCode::gaGetErrorData(O2F_ERROR_UNKNOWN);
+            FW::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
+            return ErrorCode::gaGetErrorData(FW_ERROR_UNKNOWN);
         }
 
         return $lDeviceID;
@@ -251,7 +251,7 @@ class Device extends AbstractDevice
      * @return mixed gespeichertes Object oder null im Fehlerfall
      */
     private static function moInsertOrUpdateDevice($sToken, $lAppID) {
-        O2F::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
+        FW::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
 
         $oDevice = null;
 
@@ -295,7 +295,7 @@ class Device extends AbstractDevice
 
 
         } catch(Exception $e) {
-            O2F::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
+            FW::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
             $oTransaction->rollback();
         }
 
@@ -318,7 +318,7 @@ class Device extends AbstractDevice
      * @return Array Ergebnismeldung der Löschung
      */
     public static function gaDeregisterToken($sToken, $lAppID) {
-        O2F::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
+        FW::gvTrace(func_get_args(), 'FunctionCall', __METHOD__);
 
         try {
             // Token für App schon vorhanden?
@@ -333,15 +333,15 @@ class Device extends AbstractDevice
                 if ($oDevice->delete()) {
                     return array('Success' => true);
                 } else {
-                    $aReturn = ErrorCode::gaGetErrorData(O2F_TOKEN_DELETE_FAILED);
+                    $aReturn = ErrorCode::gaGetErrorData(FW_TOKEN_DELETE_FAILED);
                     return $aReturn;
                 }
             } else {
                 return array('Success' => true);
             }
         } catch(Exception $e) {
-            O2F::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
-            return ErrorCode::gaGetErrorData(O2F_ERROR_UNKNOWN);
+            FW::gvLog($e->getMessage(), 'ErrorLog', __METHOD__);
+            return ErrorCode::gaGetErrorData(FW_ERROR_UNKNOWN);
         }
     }
 
@@ -356,7 +356,7 @@ class Device extends AbstractDevice
      */
     public function gvUpdateToken($sOldToken, $sNewToken, $lAppID)
     {
-        O2F::gvTrace(func_get_args(),'FunctionCall',__METHOD__);
+        FW::gvTrace(func_get_args(),'FunctionCall',__METHOD__);
         try
         {
             #$oDevice = new Device($lAppID);
@@ -366,7 +366,7 @@ class Device extends AbstractDevice
             if (!is_null($oDevice)) {
                 #$oNewDevice = $oDevice->find('deviceToken = :token', array(':token' => $sNewToken));
                 $oNewDevice = static::model()->scopeDeviceToken($sNewToken)->scopeApp($lAppID)->find();
-                O2F::gvTrace($oNewDevice, 'VarDump', 'trace', __METHOD__);
+                FW::gvTrace($oNewDevice, 'VarDump', 'trace', __METHOD__);
                 if (is_null($oNewDevice)) {
                     $oDevice->deviceToken = $sNewToken;
                     $oDevice->updateDate = new CDbExpression('NOW()'); // date('Y-m-d H:i:s');
@@ -374,7 +374,7 @@ class Device extends AbstractDevice
                     $oDevice->save();
 
                     if ($oDevice->hasErrors()) {
-                        O2F::gvTrace($oDevice->getErrors(),'error',__METHOD__);
+                        FW::gvTrace($oDevice->getErrors(),'error',__METHOD__);
                     }
                 } else {
                     $oDevice->delete();
@@ -383,7 +383,7 @@ class Device extends AbstractDevice
         }
         catch(Exception $e)
         {
-            O2F::gvLog($e->getMessage(), 'error', __METHOD__, "error");
+            FW::gvLog($e->getMessage(), 'error', __METHOD__, "error");
         }
     }
 }
